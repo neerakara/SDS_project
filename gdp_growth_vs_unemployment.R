@@ -7,12 +7,12 @@
 # ========================================================================
 # To access the WDI database directly from R, let's install the WDI package.
 # ========================================================================
-# install.packages("WDI")
+install.packages("WDI")
 
 # ========================================================================
 # Load the WDI package
 # ========================================================================
-# library(WDI)
+library(WDI)
 
 # ========================================================================
 # The WDI package
@@ -70,7 +70,7 @@ indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS"
 # =======================================
 # Start and end year
 # =======================================
-start_year <- 1990
+start_year <- 1995
 end_year <- 2019
 num_years <- end_year - start_year + 1
 
@@ -175,3 +175,21 @@ plot(unemployment$SL.UEM.TOTL.NE.ZS, gdp_growth$NY.GDP.MKTP.KD.ZG)
 # ========================================================================
 corr_gdp_unemployment <- cor(unemployment$SL.UEM.TOTL.NE.ZS, gdp_growth$NY.GDP.MKTP.KD.ZG)
 print(paste("Pearson correlation coeeficient between the GDP growth and the Unemplyment rate (all countries and years): ", signif(corr_gdp_unemployment,2), sep=''))
+print("As expected, we get a negative correlation between the GDP and unemployment.")
+
+# ========================================================================
+# Next step: Find the uncertainty in the correlation value, using bootstrapping
+# ========================================================================
+
+# ========================================================================
+# Next step: Use permutation test to compute the statistical significance of the correlation
+# ========================================================================
+
+# ========================================================================
+# Repeat the analysis for 
+#   1. GDP growth vs Youth unemployment
+#   2. GDP growth vs Male unemployment
+#   3. GDP growth vs Female unemployment
+#   4. GDP growth vs % of employment in industry sector 1
+#   5. GDP growth vs % of employment in industry sector 2
+# ========================================================================
