@@ -5,14 +5,12 @@
 # ========================================================================
 
 # ========================================================================
-# To access the WDI database directly from R, let's install the WDI package.
+# If not already done, install and load the WDI package.
 # ========================================================================
-# install.packages("WDI")
-
-# ========================================================================
-# Load the WDI package
-# ========================================================================
-library(WDI)
+if(!require(WDI)){
+  install.packages("WDI")
+  library(WDI)
+}
 
 # ========================================================================
 # The WDI package
@@ -25,11 +23,11 @@ library(WDI)
 # Set parameters to define the queries to the WDI package
 # ========================================================================
 
-# =======================================
+# ==========================================
 # List of countries.
 # Let us consider all European countries.
-# For now, I have searched the ISO country codes from here: https://www.iban.com/country-codes
-# =======================================
+# Searched the ISO country codes from here: https://www.iban.com/country-codes
+# ==========================================
 countries <- c("AT", # Austria
                "BE", # Belgium
                "BG", # Bulgaria
@@ -61,16 +59,16 @@ countries <- c("AT", # Austria
                "SE" # Sweden
                )
 
-# =======================================
+# ==========================================
 # Indicators
-# =======================================
+# ==========================================
 indicator_gdp_growth <- "NY.GDP.MKTP.KD.ZG"
 indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS"
 
-# =======================================
+# ==========================================
 # Start and end year
-# =======================================
-start_year <- 1995
+# ==========================================
+start_year <- 1999
 end_year <- 2019
 num_years <- end_year - start_year + 1
 
@@ -82,9 +80,9 @@ gdp_growth <- WDI(indicator = indicator_gdp_growth,
                   start = start_year,
                   end = end_year)
 
-# ========================================================================
+# ==========================================
 # Impute missing values
-# ========================================================================
+# ==========================================
 country_index <- 1
 for (country in countries)
 {
@@ -129,9 +127,9 @@ unemployment <-  WDI(indicator = indicator_unemployment_total,
 # Also, the countries are arranged in  the alphabetical order of their ISO codes! 
 # For now, I have set ordered the values in the vector countries such that it remains the same after being read by WDI.
 
-# ========================================================================
+# ==========================================
 # Impute missing values
-# ========================================================================
+# ==========================================
 country_index <- 1
 for (country in countries)
 {
@@ -165,30 +163,58 @@ for (country in countries)
   country_index <- country_index + 1
 }
 
-# ========================================================================
+# ==========================================
 # Compute the correlation between the unemployment and the GDP growth
-# ========================================================================
+# ==========================================
 corr_gdp_unemployment <- cor(unemployment$SL.UEM.TOTL.NE.ZS,
                              gdp_growth$NY.GDP.MKTP.KD.ZG)
 print(paste("Pearson correlation coeeficient between the GDP growth and the Unemplyment rate (all countries and years): ",
-            signif(corr_gdp_unemployment,3), sep=''))
+            signif(corr_gdp_unemployment, 3), sep=''))
 print("We get a (slightly) negative correlation between the GDP and unemployment.")
 
-# ========================================================================
+# ==========================================
 # Plot the Unemployment rate vs the GDP growth (for all countries and all years together)
-# ========================================================================
+# ==========================================
 plot(unemployment$SL.UEM.TOTL.NE.ZS,
      gdp_growth$NY.GDP.MKTP.KD.ZG,
-     main=paste("All countries and years. Correlation: ", signif(corr_gdp_unemployment,3), sep=''),
+     main=paste("All countries and years. Correlation: ", signif(corr_gdp_unemployment, 3), sep=''),
      xlab="Umemployment %",
      ylab="GDP Growth")
 
 # ========================================================================
-# Use Bootstrapping to obtain an uncertainty on the correlation coefficient
+# Bootstrapping to obtain an uncertainty on the correlation coefficient
 # ========================================================================
+# obtain M bootstrap samples and calculate the correlation coefficient every time
+M <- 10000
+corr_gdp_unemployment_bootstrap <- numeric(M)
+for(i in 1:M)
+{
+  sampling_indices <- sample(seq(1, length(unemployment$SL.UEM.TOTL.NE.ZS), by=1), size=600, replace=TRUE)
+
+  corr_gdp_unemployment_bootstrap[i] <- cor(unemployment$SL.UEM.TOTL.NE.ZS[sampling_indices],
+                                            gdp_growth$NY.GDP.MKTP.KD.ZG[sampling_indices])
+}
+
+bt_mean <- signif(mean(corr_gdp_unemployment_bootstrap), 3)
+bt_std <- signif(sd(corr_gdp_unemployment_bootstrap), 3)
+bt_perc97 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.975)), 3)
+bt_perc2 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.025)), 3)
+
+hist(corr_gdp_unemployment_bootstrap,
+     main=paste("Bootstrapped values of the correlation coefficient: mean", bt_mean, ", std.dev.: ", bt_std, sep=''),
+     sub = "Red line shows the measured value.",
+     xlab="Correlation (GDP, Unemployment)")
+abline(v=corr_gdp_unemployment, col="red")
+
+print(paste("The measured coefficient is ", signif(corr_gdp_unemployment, 3), sep=''))
+print(paste("And the mean of the bootstrapped coefficient is ", bt_mean, sep=''))
+print("Thus, the measurement is unbiased but there is quite a variance in the results:")
+print(paste("The standard deviation is ", bt_std, sep=''))
+paste("The 95% density interval goes from ", bt_perc97, " to ", bt_perc2, sep='')
+print("Thus, the real correlation coefficient value for a larger sample could vary quite a bit.")
 
 # ========================================================================
-# Use a permutation test to compute the statistical significance of the correlation
+# Permutation test to compute the statistical significance of the correlation
 # ========================================================================
 # repeat shuffling for N times
 N <- 10000 
@@ -201,21 +227,22 @@ for(i in 1:N)
                                                    gdp_growth$NY.GDP.MKTP.KD.ZG)
 }
 
-# ========================================================================
+# ==========================================
 # Computing the p-value of the permutation test
 # A nice explanation of permutation test can be read here: https://www.jwilber.me/permutationtest/
-# ========================================================================
+# ==========================================
 p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemployment)+1)/length(corr_gdp_unemployment_permutation_test)
 print(paste("p-value: ", signif(p_value_Cor, 3), sep=''))
-print("As the p-value is not greater than 0.05, we cannot say that the observed correlation is statistically significant.")
+print("As the p-value is smaller than 0.05, we can say that the observed correlation is statistically significant.")
 
-# ========================================================================
+# ==========================================
 # Plotting the histogram of the computed correlation coefficients.
 # Showing as a red line, the correlation coefficient between the unshuffled variables.
-# ========================================================================
+# ==========================================
 hist(corr_gdp_unemployment_permutation_test,
      xlim=range(c(corr_gdp_unemployment_permutation_test, corr_gdp_unemployment)),
      main=paste("Permutation test. P-value: ", signif(p_value_Cor, 3), sep=''),
+     sub = "Red line shows the measured value.",
      xlab="Correlation (GDP, Unemployment)")
 abline(v=corr_gdp_unemployment, col="red")
 
