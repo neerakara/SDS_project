@@ -7,7 +7,7 @@
 # ========================================================================
 # To access the WDI database directly from R, let's install the WDI package.
 # ========================================================================
-install.packages("WDI")
+# install.packages("WDI")
 
 # ========================================================================
 # Load the WDI package
@@ -75,59 +75,12 @@ end_year <- 2019
 num_years <- end_year - start_year + 1
 
 # ========================================================================
-# Get the unemployment at percentage of total labour force
-# ========================================================================
-unemployment <-  WDI(indicator = indicator_unemployment_total,
-                     country = countries,
-                     start = start_year,
-                     end = end_year)
-# The data is read from end_year to start_year for country[1], followed by end_year to start_year for country[2], and so on..
-# Also, the countries are arranged in  the alphabetical order of their ISO codes! 
-# For now, I have set ordered the values in the vector countries such that it remains the same after being read by WDI.
-
-# ========================================================================
-# Impute missing values
-# ========================================================================
-country_index <- 1
-for (country in countries)
-{
-  tmp_idx1 <- (country_index-1)*num_years+1
-  tmp_idx2 <- country_index*num_years
-  num_na <- length(which(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] %in% NA))
-  
-  # For this country, replace the NAs with the values of nearby years
-  if (num_na > 0)
-  {
-    print(paste("Number of data points unavailable for ", countries[country_index], ": ", num_na, sep=''))
-    print("Imputing missing values... ")
-    print("Values before imputation: ")
-    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
-    
-    tmp <- WDI(indicator = indicator_unemployment_total,
-               country = country,
-               start = start_year,
-               end = end_year)
-    
-    # set the value of the unavailable data point to the value of the next year.
-    # this Works for now, as the data is available for the latest year for all countries.
-    na_indices <- which(tmp$SL.UEM.TOTL.NE.ZS %in% NA)
-    for (na_index in na_indices)
-      tmp$SL.UEM.TOTL.NE.ZS[na_index] <- tmp$SL.UEM.TOTL.NE.ZS[na_index - 1]
-
-    unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] <- tmp$SL.UEM.TOTL.NE.ZS
-    print("Values afteriImputation: ")
-    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
-  } 
-  country_index <- country_index + 1
-}
-
-# ========================================================================
 # Get the GDP growth 
 # ========================================================================
-gdp_growth <-  WDI(indicator = indicator_gdp_growth,
-                   country = countries,
-                   start = start_year,
-                   end = end_year)
+gdp_growth <- WDI(indicator = indicator_gdp_growth,
+                  country = countries,
+                  start = start_year,
+                  end = end_year)
 
 # ========================================================================
 # Impute missing values
@@ -166,24 +119,105 @@ for (country in countries)
 }
 
 # ========================================================================
-# Plot the Unemployment rate vs the GDP growth (for all countries and all years together)
+# Get the unemployment at percentage of total labour force
 # ========================================================================
-plot(unemployment$SL.UEM.TOTL.NE.ZS, gdp_growth$NY.GDP.MKTP.KD.ZG)
+unemployment <-  WDI(indicator = indicator_unemployment_total,
+                     country = countries,
+                     start = start_year,
+                     end = end_year)
+# The data is read from end_year to start_year for country[1], followed by end_year to start_year for country[2], and so on..
+# Also, the countries are arranged in  the alphabetical order of their ISO codes! 
+# For now, I have set ordered the values in the vector countries such that it remains the same after being read by WDI.
+
+# ========================================================================
+# Impute missing values
+# ========================================================================
+country_index <- 1
+for (country in countries)
+{
+  tmp_idx1 <- (country_index-1)*num_years+1
+  tmp_idx2 <- country_index*num_years
+  num_na <- length(which(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] %in% NA))
+  
+  # For this country, replace the NAs with the values of nearby years
+  if (num_na > 0)
+  {
+    print(paste("Number of data points unavailable for ", countries[country_index], ": ", num_na, sep=''))
+    print("Imputing missing values... ")
+    print("Values before imputation: ")
+    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
+    
+    tmp <- WDI(indicator = indicator_unemployment_total,
+               country = country,
+               start = start_year,
+               end = end_year)
+    
+    # set the value of the unavailable data point to the value of the next year.
+    # this Works for now, as the data is available for the latest year for all countries.
+    na_indices <- which(tmp$SL.UEM.TOTL.NE.ZS %in% NA)
+    for (na_index in na_indices)
+      tmp$SL.UEM.TOTL.NE.ZS[na_index] <- tmp$SL.UEM.TOTL.NE.ZS[na_index - 1]
+    
+    unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] <- tmp$SL.UEM.TOTL.NE.ZS
+    print("Values afteriImputation: ")
+    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
+  } 
+  country_index <- country_index + 1
+}
 
 # ========================================================================
 # Compute the correlation between the unemployment and the GDP growth
 # ========================================================================
-corr_gdp_unemployment <- cor(unemployment$SL.UEM.TOTL.NE.ZS, gdp_growth$NY.GDP.MKTP.KD.ZG)
-print(paste("Pearson correlation coeeficient between the GDP growth and the Unemplyment rate (all countries and years): ", signif(corr_gdp_unemployment,2), sep=''))
-print("As expected, we get a negative correlation between the GDP and unemployment.")
+corr_gdp_unemployment <- cor(unemployment$SL.UEM.TOTL.NE.ZS,
+                             gdp_growth$NY.GDP.MKTP.KD.ZG)
+print(paste("Pearson correlation coeeficient between the GDP growth and the Unemplyment rate (all countries and years): ",
+            signif(corr_gdp_unemployment,3), sep=''))
+print("We get a (slightly) negative correlation between the GDP and unemployment.")
 
 # ========================================================================
-# Next step: Find the uncertainty in the correlation value, using bootstrapping
+# Plot the Unemployment rate vs the GDP growth (for all countries and all years together)
+# ========================================================================
+plot(unemployment$SL.UEM.TOTL.NE.ZS,
+     gdp_growth$NY.GDP.MKTP.KD.ZG,
+     main=paste("All countries and years. Correlation: ", signif(corr_gdp_unemployment,3), sep=''),
+     xlab="Umemployment %",
+     ylab="GDP Growth")
+
+# ========================================================================
+# Use Bootstrapping to obtain an uncertainty on the correlation coefficient
 # ========================================================================
 
 # ========================================================================
-# Next step: Use permutation test to compute the statistical significance of the correlation
+# Use a permutation test to compute the statistical significance of the correlation
 # ========================================================================
+# repeat shuffling for N times
+N <- 10000 
+# vector with the results of the test statistic under each permutation
+corr_gdp_unemployment_permutation_test <- numeric(length = N) 
+for(i in 1:N)
+{
+  unemployment_shufled <- unemployment[sample(nrow(unemployment)),]
+  corr_gdp_unemployment_permutation_test[i] <- cor(unemployment_shufled$SL.UEM.TOTL.NE.ZS,
+                                                   gdp_growth$NY.GDP.MKTP.KD.ZG)
+}
+
+# ========================================================================
+# Computing the p-value of the permutation test
+# A nice explanation of permutation test can be read here: https://www.jwilber.me/permutationtest/
+# ========================================================================
+p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemployment)+1)/length(corr_gdp_unemployment_permutation_test)
+print(paste("p-value: ", signif(p_value_Cor, 3), sep=''))
+print("As the p-value is not greater than 0.05, we cannot say that the observed correlation is statistically significant.")
+
+# ========================================================================
+# Plotting the histogram of the computed correlation coefficients.
+# Showing as a red line, the correlation coefficient between the unshuffled variables.
+# ========================================================================
+hist(corr_gdp_unemployment_permutation_test,
+     xlim=range(c(corr_gdp_unemployment_permutation_test, corr_gdp_unemployment)),
+     main=paste("Permutation test. P-value: ", signif(p_value_Cor, 3), sep=''),
+     xlab="Correlation (GDP, Unemployment)")
+abline(v=corr_gdp_unemployment, col="red")
 
 # ========================================================================
 # Repeat the analysis for 
@@ -193,3 +227,31 @@ print("As expected, we get a negative correlation between the GDP and unemployme
 #   4. GDP growth vs % of employment in industry sector 1
 #   5. GDP growth vs % of employment in industry sector 2
 # ========================================================================
+
+# ========================================================================
+# Other available indicators related to employment
+# ========================================================================
+# Some indicators are available in two formats: 1. national estimate and 2. modeled ILO estimate
+# ========================================================================
+# Unemployment, total (% of total labor force) (national estimate)(SL.UEM.TOTL.NE.ZS)
+# Unemployment, total (% of total labor force) (modeled ILO estimate)(SL.UEM.TOTL.ZS)
+# ===================
+# Unemployment, youth total (% of total labor force ages 15-24) (national estimate)(SL.UEM.1524.NE.ZS)
+# Unemployment, youth total (% of total labor force ages 15-24) (modeled ILO estimate)(SL.UEM.1524.ZS)
+# ===================
+# Unemployment, male (% of male labor force) (national estimate)(SL.UEM.TOTL.MA.NE.ZS)
+# Unemployment, male (% of male labor force) (modeled ILO estimate)(SL.UEM.TOTL.MA.ZS)
+# ===================
+# Unemployment, female (% of female labor force) (national estimate)(SL.UEM.TOTL.FE.NE.ZS)
+# Unemployment, female (% of female labor force) (modeled ILO estimate)(SL.UEM.TOTL.FE.ZS)
+# ===================
+# Employment in agriculture (% of total employment) (modeled ILO estimate) (SL.AGR.EMPL.ZS)
+# The agriculture sector consists of activities in agriculture, hunting, forestry and fishing.
+# ===================
+# Employment in industry (% of total employment) (modeled ILO estimate) (SL.IND.EMPL.ZS)
+# The industry sector consists of mining and quarrying, manufacturing, construction, and public utilities (electricity, gas, and water)
+# ===================
+# Employment in services (% of total employment) (SL.SRV.EMPL.ZS)
+# The services sector consists of wholesale and retail trade and restaurants and hotels;
+# transport, storage, and communications; financing, insurance, real estate, and business services; and community, social, and personal services
+# ===================
