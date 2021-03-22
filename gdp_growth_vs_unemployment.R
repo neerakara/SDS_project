@@ -60,6 +60,12 @@ countries <- c("AT", # Austria
                )
 
 # ==========================================
+# To do the analysis for a subset of the countries, edit and uncomment the following line 
+# ==========================================
+# countries <- c("NL")
+num_countries <- length(countries)
+
+# ==========================================
 # Indicators
 # ==========================================
 indicator_gdp_growth <- "NY.GDP.MKTP.KD.ZG"
@@ -71,6 +77,7 @@ indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS"
 start_year <- 1999
 end_year <- 2019
 num_years <- end_year - start_year + 1
+num_datapoints <- num_countries * num_years
 
 # ========================================================================
 # Get the GDP growth 
@@ -189,7 +196,7 @@ M <- 10000
 corr_gdp_unemployment_bootstrap <- numeric(M)
 for(i in 1:M)
 {
-  sampling_indices <- sample(seq(1, length(unemployment$SL.UEM.TOTL.NE.ZS), by=1), size=600, replace=TRUE)
+  sampling_indices <- sample(seq(1, length(unemployment$SL.UEM.TOTL.NE.ZS), by=1), size=num_datapoints, replace=TRUE)
 
   corr_gdp_unemployment_bootstrap[i] <- cor(unemployment$SL.UEM.TOTL.NE.ZS[sampling_indices],
                                             gdp_growth$NY.GDP.MKTP.KD.ZG[sampling_indices])
