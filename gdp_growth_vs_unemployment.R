@@ -67,9 +67,31 @@ num_countries <- length(countries)
 
 # ==========================================
 # Indicators
+# https://databank.worldbank.org/source/world-development-indicators
 # ==========================================
 indicator_gdp_growth <- "NY.GDP.MKTP.KD.ZG"
-indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS"
+# ==========================================
+# Unemployment - total and in different population groups
+# ==========================================
+indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS" # Unemployment, total (% of total labor force) (national estimate)
+indicator_unemployment_youth <- "SL.UEM.1524.NE.ZS" # Unemployment, youth total (% of total labor force ages 15-24) (national estimate)
+indicator_unemployment_male <- "SL.UEM.TOTL.MA.NE.ZS" # Unemployment, male (% of male labor force) (national estimate)
+indicator_unemployment_female <- "SL.UEM.TOTL.FE.NE.ZS" # Unemployment, female (% of female labor force) (national estimate)
+# ==========================================
+# Employment in different industry sectors
+# ==========================================
+indicator_employment_agriculture <- "SL.AGR.EMPL.ZS"
+# Employment in agriculture (% of total employment) (modeled ILO estimate)
+# The agriculture sector consists of activities in agriculture, hunting, forestry and fishing.
+indicator_employment_industry <- "SL.IND.EMPL.ZS"
+# Employment in industry (% of total employment) (modeled ILO estimate)
+# The industry sector consists of mining and quarrying, manufacturing, construction, and public utilities (electricity, gas, and water)
+indicator_employment_services <- "SL.SRV.EMPL.ZS"
+# Employment in services (% of total employment)
+# The services sector consists of wholesale and retail trade and restaurants and hotels;
+# transport, storage, and communications; financing, insurance, real estate, and business services; and community, social, and personal services
+# ===================
+
 
 # ==========================================
 # Start and end year
@@ -95,7 +117,7 @@ for (country in countries)
 {
   tmp_idx1 <- (country_index-1)*num_years+1
   tmp_idx2 <- country_index*num_years
-  num_na <- length(which(gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2] %in% NA))
+  num_na <- length(which(gdp_growth[,3][tmp_idx1:tmp_idx2] %in% NA))
   
   # For this country, replace the NAs with the values of nearby years
   if (num_na > 0)
@@ -103,7 +125,7 @@ for (country in countries)
     print(paste("Number of data points unavailable for ", countries[country_index], ": ", num_na, sep=''))
     print("Imputing missing values... ")
     print("Values before imputation: ")
-    print(signif(gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2],2))
+    print(signif(gdp_growth[,3][tmp_idx1:tmp_idx2],2))
     
     tmp <- WDI(indicator = indicator_gdp_growth,
                country = country,
@@ -112,13 +134,13 @@ for (country in countries)
     
     # set the value of the unavailable data point to the value of the next year.
     # this Works for now, as the data is available for the latest year for all countries.
-    na_indices <- which(tmp$NY.GDP.MKTP.KD.ZG %in% NA)
+    na_indices <- which(tmp[,3] %in% NA)
     for (na_index in na_indices)
-      tmp$NY.GDP.MKTP.KD.ZG[na_index] <- tmp$NY.GDP.MKTP.KD.ZG[na_index - 1]
+      tmp[,3][na_index] <- tmp[,3][na_index - 1]
     
-    gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2] <- tmp$NY.GDP.MKTP.KD.ZG
+    gdp_growth[,3][tmp_idx1:tmp_idx2] <- tmp[,3]
     print("Values after imputation: ")
-    print(signif(gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2],2))
+    print(signif(gdp_growth[,3][tmp_idx1:tmp_idx2],2))
   } 
   country_index <- country_index + 1
 }
@@ -126,7 +148,7 @@ for (country in countries)
 # ========================================================================
 # Get the unemployment at percentage of total labour force
 # ========================================================================
-unemployment <-  WDI(indicator = indicator_unemployment_total,
+unemployment <-  WDI(indicator = indicator_employment_services,
                      country = countries,
                      start = start_year,
                      end = end_year)
@@ -142,7 +164,7 @@ for (country in countries)
 {
   tmp_idx1 <- (country_index-1)*num_years+1
   tmp_idx2 <- country_index*num_years
-  num_na <- length(which(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] %in% NA))
+  num_na <- length(which(unemployment[,3][tmp_idx1:tmp_idx2] %in% NA))
   
   # For this country, replace the NAs with the values of nearby years
   if (num_na > 0)
@@ -150,22 +172,22 @@ for (country in countries)
     print(paste("Number of data points unavailable for ", countries[country_index], ": ", num_na, sep=''))
     print("Imputing missing values... ")
     print("Values before imputation: ")
-    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
+    print(signif(unemployment[,3][tmp_idx1:tmp_idx2],2))
     
-    tmp <- WDI(indicator = indicator_unemployment_total,
+    tmp <- WDI(indicator = indicator_employment_services,
                country = country,
                start = start_year,
                end = end_year)
     
     # set the value of the unavailable data point to the value of the next year.
     # this Works for now, as the data is available for the latest year for all countries.
-    na_indices <- which(tmp$SL.UEM.TOTL.NE.ZS %in% NA)
+    na_indices <- which(tmp[,3] %in% NA)
     for (na_index in na_indices)
-      tmp$SL.UEM.TOTL.NE.ZS[na_index] <- tmp$SL.UEM.TOTL.NE.ZS[na_index - 1]
+      tmp[,3][na_index] <- tmp[,3][na_index - 1]
     
-    unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2] <- tmp$SL.UEM.TOTL.NE.ZS
+    unemployment[,3][tmp_idx1:tmp_idx2] <- tmp[,3]
     print("Values afteriImputation: ")
-    print(signif(unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2],2))
+    print(signif(unemployment[,3][tmp_idx1:tmp_idx2],2))
   } 
   country_index <- country_index + 1
 }
@@ -173,8 +195,7 @@ for (country in countries)
 # ==========================================
 # Compute the correlation between the unemployment and the GDP growth
 # ==========================================
-corr_gdp_unemployment <- cor(unemployment$SL.UEM.TOTL.NE.ZS,
-                             gdp_growth$NY.GDP.MKTP.KD.ZG)
+corr_gdp_unemployment <- cor(unemployment[,3], gdp_growth[,3])
 print(paste("Pearson correlation coeeficient between the GDP growth and the Unemplyment rate (all countries and years): ",
             signif(corr_gdp_unemployment, 3), sep=''))
 print("We get a (slightly) negative correlation between the GDP and unemployment.")
@@ -182,10 +203,10 @@ print("We get a (slightly) negative correlation between the GDP and unemployment
 # ==========================================
 # Plot the Unemployment rate vs the GDP growth (for all countries and all years together)
 # ==========================================
-plot(unemployment$SL.UEM.TOTL.NE.ZS,
-     gdp_growth$NY.GDP.MKTP.KD.ZG,
+plot(unemployment[,3],
+     gdp_growth[,3],
      main=paste("All countries and years. Correlation: ", signif(corr_gdp_unemployment, 3), sep=''),
-     xlab="Umemployment %",
+     xlab="Employment % in this sector",
      ylab="GDP Growth")
 
 # ==========================================
@@ -198,8 +219,8 @@ for (country in countries)
   tmp_idx1 <- (country_index-1)*num_years+1
   tmp_idx2 <- country_index*num_years
 
-  unemployment_this_country <- unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2]
-  gdp_growth_this_country <- gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2]
+  unemployment_this_country <- unemployment[,3][tmp_idx1:tmp_idx2]
+  gdp_growth_this_country <- gdp_growth[,3][tmp_idx1:tmp_idx2]
   
   
   if(country == 'PT')
@@ -277,10 +298,10 @@ M <- 10000
 corr_gdp_unemployment_bootstrap <- numeric(M)
 for(i in 1:M)
 {
-  sampling_indices <- sample(seq(1, length(unemployment$SL.UEM.TOTL.NE.ZS), by=1), size=num_datapoints, replace=TRUE)
+  sampling_indices <- sample(seq(1, length(unemployment[,3]), by=1), size=num_datapoints, replace=TRUE)
 
-  corr_gdp_unemployment_bootstrap[i] <- cor(unemployment$SL.UEM.TOTL.NE.ZS[sampling_indices],
-                                            gdp_growth$NY.GDP.MKTP.KD.ZG[sampling_indices])
+  corr_gdp_unemployment_bootstrap[i] <- cor(unemployment[,3][sampling_indices],
+                                            gdp_growth[,3][sampling_indices])
 }
 
 bt_mean <- signif(mean(corr_gdp_unemployment_bootstrap), 3)
@@ -291,7 +312,7 @@ bt_perc2 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.025)), 3)
 hist(corr_gdp_unemployment_bootstrap,
      main=paste("Bootstrapped values of the correlation coefficient: mean", bt_mean, ", std.dev.: ", bt_std, sep=''),
      sub = "Red line shows the measured value.",
-     xlab="Correlation (GDP, Unemployment)")
+     xlab="Correlation (GDP, Employment)")
 abline(v=corr_gdp_unemployment, col="red")
 
 print(paste("The measured coefficient is ", signif(corr_gdp_unemployment, 3), sep=''))
@@ -311,14 +332,16 @@ corr_gdp_unemployment_permutation_test <- numeric(length = N)
 for(i in 1:N)
 {
   unemployment_shufled <- unemployment[sample(nrow(unemployment)),]
-  corr_gdp_unemployment_permutation_test[i] <- cor(unemployment_shufled$SL.UEM.TOTL.NE.ZS,
-                                                   gdp_growth$NY.GDP.MKTP.KD.ZG)
+  corr_gdp_unemployment_permutation_test[i] <- cor(unemployment_shufled[,3],
+                                                   gdp_growth[,3])
 }
 
 # ==========================================
 # Computing the p-value of the permutation test
 # A nice explanation of permutation test can be read here: https://www.jwilber.me/permutationtest/
 # ==========================================
+# For testing the significance of a positive correlation, we need a >= in the formula below
+# For testing the significance of a negative correlation, we need a <= in the formula below
 p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemployment)+1)/length(corr_gdp_unemployment_permutation_test)
 print(paste("p-value: ", signif(p_value_Cor, 3), sep=''))
 print("As the p-value is smaller than 0.05, we can say that the observed correlation is statistically significant.")
@@ -331,42 +354,5 @@ hist(corr_gdp_unemployment_permutation_test,
      xlim=range(c(corr_gdp_unemployment_permutation_test, corr_gdp_unemployment)),
      main=paste("Permutation test. P-value: ", signif(p_value_Cor, 3), sep=''),
      sub = "Red line shows the measured value.",
-     xlab="Correlation (GDP, Unemployment)")
+     xlab="Correlation (GDP, Employment)")
 abline(v=corr_gdp_unemployment, col="red")
-
-# ========================================================================
-# Repeat the analysis for 
-#   1. GDP growth vs Youth unemployment
-#   2. GDP growth vs Male unemployment
-#   3. GDP growth vs Female unemployment
-#   4. GDP growth vs % of employment in industry sector 1
-#   5. GDP growth vs % of employment in industry sector 2
-# ========================================================================
-
-# ========================================================================
-# Other available indicators related to employment
-# ========================================================================
-# Some indicators are available in two formats: 1. national estimate and 2. modeled ILO estimate
-# ========================================================================
-# Unemployment, total (% of total labor force) (national estimate)(SL.UEM.TOTL.NE.ZS)
-# Unemployment, total (% of total labor force) (modeled ILO estimate)(SL.UEM.TOTL.ZS)
-# ===================
-# Unemployment, youth total (% of total labor force ages 15-24) (national estimate)(SL.UEM.1524.NE.ZS)
-# Unemployment, youth total (% of total labor force ages 15-24) (modeled ILO estimate)(SL.UEM.1524.ZS)
-# ===================
-# Unemployment, male (% of male labor force) (national estimate)(SL.UEM.TOTL.MA.NE.ZS)
-# Unemployment, male (% of male labor force) (modeled ILO estimate)(SL.UEM.TOTL.MA.ZS)
-# ===================
-# Unemployment, female (% of female labor force) (national estimate)(SL.UEM.TOTL.FE.NE.ZS)
-# Unemployment, female (% of female labor force) (modeled ILO estimate)(SL.UEM.TOTL.FE.ZS)
-# ===================
-# Employment in agriculture (% of total employment) (modeled ILO estimate) (SL.AGR.EMPL.ZS)
-# The agriculture sector consists of activities in agriculture, hunting, forestry and fishing.
-# ===================
-# Employment in industry (% of total employment) (modeled ILO estimate) (SL.IND.EMPL.ZS)
-# The industry sector consists of mining and quarrying, manufacturing, construction, and public utilities (electricity, gas, and water)
-# ===================
-# Employment in services (% of total employment) (SL.SRV.EMPL.ZS)
-# The services sector consists of wholesale and retail trade and restaurants and hotels;
-# transport, storage, and communications; financing, insurance, real estate, and business services; and community, social, and personal services
-# ===================
