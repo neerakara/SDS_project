@@ -1,0 +1,289 @@
+---
+title: "LinkedinData"
+author: "Giorgio Cristiano"
+date: "3/25/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Before beginning we install the needed packages
+
+```{r}
+# install.packages("WDI")
+# install.packages("dplyr")
+# install.packages("tidyverse")
+# install.packages("broom")
+
+library(WDI)
+library(dplyr)
+library(tidyverse)
+library(broom)
+library(boot)
+```
+
+
+First step is to download the useful files from the WorldBank - Linkedin collaboration website. These files contain data for the years 2015 to 2019
+
+```{r}
+download.file("https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/country_migration_public.csv", destfile = "CountryMigration.csv")
+
+download.file("https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/industry_migration_public.csv", destfile = "IndustryMigration.csv")
+
+download.file("https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/skill_migration_public.csv", destfile = "SkillMigration.csv")
+```
+
+Then we create the dataframes from the csv files that we downloaded, and we pre-process the data to get only the entries in Europe.
+
+```{r}
+countrydf_raw <- read.csv("CountryMigration.csv", header = T, sep = ",")
+industrydf_raw <- read.csv("IndustryMigration.csv", header = T, sep = ",")
+skilldf_raw <- read.csv("SkillMigration.csv", header = T, sep = ",")
+
+countrydf <-countrydf_raw %>%
+  filter(base_country_wb_region == "Europe & Central Asia") %>%
+    filter(target_country_wb_region == "Europe & Central Asia")
+
+industrydf <-industrydf_raw %>%
+  filter(wb_region == "Europe & Central Asia")
+
+skilldf <-skilldf_raw %>%
+  filter(wb_region == "Europe & Central Asia")
+```
+
+Get the GDP data from the WBI for the years 2015 - 2019
+
+```{r WDIdata}
+WDIdf <- WDI(indicator="NY.GDP.PCAP.PP.KD", country ="all", start = 2015, end = 2019, extra = F)
+WDIdf <- WDIdf[c("country", "year", "NY.GDP.PCAP.PP.KD")]
+```
+
+Let's start with the migration analysis. THe aim of this section is to correlate the net migration flux of a country to its GDP. Furthermore, we will correlate the migration flux to the GDP difference between the two countries.
+First of all we will need to add to the Country Migration dataframe the GDP data coming from the WDI dataframe. 
+Before doing so we should pivot the countrydf from wider to longer, in order to have an easier merge with the WDIdf
+
+```{r}
+countrydf_merged <- countrydf %>%
+  pivot_longer(cols = starts_with("net_per_10K_"),
+               names_to = "year",
+               names_prefix = "net_per_10K_",
+               names_transform = list(year = as.integer),
+               values_to = "net_per_10K",
+               values_transform = list(net_per_10k = as.double)) %>%
+    inner_join(WDIdf,  by = c("base_country_name" = "country", "year")) %>%
+      inner_join(WDIdf, by = c("target_country_name" = "country", "year")) %>%
+        rename(base_country_GDP = NY.GDP.PCAP.PP.KD.x, 
+               target_country_GDP = NY.GDP.PCAP.PP.KD.y)
+```
+
+Now we can correlate the total migration flux to the base country GDP. As a first step we will average the GDP and migration flux of each country over the whole six years.
+
+```{r}
+  
+countrydf_tot <- countrydf_merged %>%
+  filter(year %in% 2015:2019) %>% 
+  group_by(base_country_code, year, base_country_GDP) %>% 
+  summarise(totalflux = mean(net_per_10K))
+
+contrydf_avgbycountry <- countrydf_tot %>% 
+  # filter(abs(totalflux) < 10) %>% 
+  mutate(year = as.character(year)) %>% 
+  group_by(base_country_code) %>% 
+  summarise(avg_flux = mean(totalflux),
+            avg_gdp = mean(base_country_GDP))
+
+model_avgbycountry <- lm(avg_flux ~ avg_gdp, data = contrydf_avgbycountry)
+
+contrydf_avgbycountry %>% 
+  ggplot(aes(x = log(avg_gdp), y = avg_flux)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "lg(average gdp)", y = "average migration flux") +
+  # scale_color_manual(values = c("black","black","black","black", "violet")) +
+  theme_bw()
+```
+
+This first plot shows the expected positive correlation between the GDP and the migration flux. Thus poorer countries tend to have a more outgoing countries, with respect to richer countries that have more people coming in.
+
+We can evaluate the fitted model through the R squared statistic. This shows that `r round(summary(model_avgbycountry)$r.squared*100, 1)`% of the data variance is explained by the linear fitting.
+
+
+As a next step we can actually evaluate how the migration flux has evolved over the years. We can start by plotting the data not averaged per country, but rather groupped in different sets by year.
+
+```{r}
+
+countrydf_tot %>% 
+  mutate(year = as.character(year)) %>% 
+  ggplot(aes(x = log(base_country_GDP), y = totalflux, color = year)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  # scale_color_manual(values = c("black","black","black","black", "violet")) +
+  theme_bw()
+
+```
+As expected the positive correlation stays there when moving from 2015 to 2019. However, there seems to be a decreasing trend in the slope of the fitted line. To better evaluate this, we can plot the estimated coefficient as a function of the year.
+
+
+```{r}
+model_list <- lapply(2015:2019, function(y){
+  countrydf_tot %>% 
+    filter(year == y) %>% 
+    lm(totalflux ~ log(base_country_GDP), data = .) %>% 
+    summary %>% 
+    coefficients %>% 
+    as.data.frame() %>% 
+    select(Estimate, 
+           "Std. Error") %>% 
+    mutate(year = y) %>% 
+    rename(stderr = "Std. Error") %>% 
+    tail(1)
+})
+
+do.call("rbind", model_list) %>% 
+  ggplot(aes(x = year, y = Estimate)) +
+  geom_segment(aes(x = year, xend = year, y = (Estimate - stderr), 
+                   yend = (Estimate + stderr)), 
+               color = "darkgray", size = 1.5, alpha = 1) + 
+  geom_point(size = 4, color = "#F55D5D") +
+  ylim(1, 3.5) +
+  theme_bw()
+
+# print(summary(model)$r.squared)
+```
+
+Here we have plotted the linear model coefficient together with 1 standard error for each year. Whilst the average has a decreasing trend over the years, it is well in the std error range, and thus cannot be distinguished from normal fluctuation.
+
+
+```{r}
+countrydf_merged$GDPdifference = (countrydf_merged$base_country_GDP - countrydf_merged$target_country_GDP) / 10000
+
+countrydf_GDPdifference <- countrydf_merged %>% 
+  filter(year %in% 2015:2019) %>% 
+  group_by(base_country_code, target_country_code) %>% 
+  summarise(avg_flux = sum(net_per_10K),
+            avg_gdp = mean(GDPdifference))
+model_GDPdifference <- lm(avg_flux ~ avg_gdp, countrydf_GDPdifference)
+print(summary(model_GDPdifference)$r.squared)
+
+countrydf_GDPdifference %>% 
+  ggplot(aes(x = avg_gdp, y = avg_flux)) + 
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") +
+  labs(x = "GDP difference (x10^4)") +
+  labs(y = "Net migration flux") +
+  theme_bw()
+```
+```{r}
+countrydf_merged$GDPdifference = (countrydf_merged$base_country_GDP - countrydf_merged$target_country_GDP) / 10000
+
+countrydf_GDPdifference <- countrydf_merged %>% 
+  filter(year %in% 2015:2019) %>% 
+  group_by(base_country_code, target_country_code) %>% 
+  summarise(avg_flux = mean(net_per_10K),
+            avg_gdp = mean(GDPdifference))
+model_GDPdifference <- lm(avg_flux ~ avg_gdp, countrydf_GDPdifference)
+print(summary(model_GDPdifference)$r.squared)
+
+countrydf_GDPdifference %>% 
+  ggplot(aes(x = avg_gdp, y = avg_flux)) + 
+  geom_point() +
+  geom_smooth(method = "lm", col = "red") +
+  labs(x = "GDP difference (x10^4)") +
+  labs(y = "Net migration flux") +
+  theme_bw()
+```
+
+```{r}
+hist(summary(model_GDPdifference)$residuals)
+```
+Here we actually have more data, so we can perform a bootstrap analysis.
+
+
+```{r}
+returnCoeff2 <- function(datav, sampleindices){
+  d <- lm(datav$net_per_10K[sampleindices] ~ datav$GDPdifference[sampleindices]);
+  return (d$coefficients[2])
+}
+bootResults <- boot(data = countrydf_2019, statistic = returnCoeff2, R = 10000)
+
+print(sd(bootResults$t))
+
+hist(bootResults$t)
+abline(v = model_diff$coefficients[2], col = "red")
+
+```
+
+From the bootstrap analysis we get that the correlation between net migration flux and GDP difference (/1000) is 0.4 ± 0.1. Thus we can confidently state that there is a positive correlation.
+
+Another interesting analysis is how much of the migration flux is going towards countries with a higher GDP. We can again analyse this for year 2019. 
+
+```{r}
+countrydf_2019$towardsHigherGDP = (countrydf_2019$net_per_10K*countrydf_2019$GDPdifference) > 0
+N <- nrow(countrydf_2019)
+proportion = sum(as.numeric(countrydf_2019$towardsHigherGDP))/N 
+hist(as.numeric(countrydf_2019$towardsHigherGDP))
+```
+
+As expected, in almost 80% of cases the migration flux goes towards richer countries.
+
+
+```{r}
+countrydf_growth <- countrydf_merged %>%
+  group_by(base_country_code) %>% 
+  summarise(tot_flux = sum(net_per_10K), tot_growth = (base_country_GDP[year == 2019]-base_country_GDP[year == 2015])/base_country_GDP[year == 2015]) %>% 
+  distinct()
+
+model_growth <- lm(tot_flux ~ tot_growth, countrydf_growth)
+print(summary(model_growth)$r.squared)
+
+countrydf_growth %>% 
+  ggplot(aes(x = tot_growth, y = tot_flux)) + 
+  geom_point() +
+  geom_smooth(method = "lm", col = "red", se = F) +
+  labs(x = "GDP growth") +
+  labs(y = "Tot migration flux") +
+  theme_bw()
+  
+```
+This shows how the migration flux does not seem to have an impact on the GDP growth.
+
+```{r}
+install.packages("readxl")
+library("readxl")
+download.file("https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202906/public_use-industry-employment-growth.xlsx", destfile = "IndustryGrowth.xlsx", mode = "wb")
+
+```
+
+```{r}
+cumulativeGDP_df <- countrydf_tot %>% 
+  group_by(base_country_code) %>% 
+    summarise(GDP2015 = base_country_GDP[year==2015], GDP2019 = base_country_GDP[year == 2019], GDPgrowth = (base_country_GDP[year == 2019]-base_country_GDP[year == 2015])/base_country_GDP[year == 2015])
+
+industryGrowth_df <- read_excel("IndustryGrowth.xlsx", sheet = 4) %>% 
+  filter(wb_region == "Europe & Central Asia") %>%
+  mutate(tot_growth = ((1+growth_rate_2015)*(1+growth_rate_2016)*(1+growth_rate_2017)*(1+growth_rate_2018)*(1+growth_rate_2019))-1) %>% 
+  inner_join(cumulativeGDP_df, by = c("country_code" = "base_country_code")) %>% 
+  group_by(isic_section_index, isic_section_name, GDP2015, GDP2019, country_code, GDPgrowth) %>% 
+  summarise(growth = mean(tot_growth)*100, growth2015 = mean(growth_rate_2015)*100, growth2019 = mean(growth_rate_2019)*100)
+industryGrowth_df %>% 
+  ggplot(aes(x = log(GDP2019), y = growth2019, color = isic_section_name)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "GDP 2019") +
+  labs(y = "Tot Industry growth(%)") +
+  theme_bw()
+        
+
+```
+
+```{r}
+industryGrowth_df %>% 
+  ggplot(aes(x = GDPgrowth, y = growth, color = isic_section_name)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "GDP growth") +
+  labs(y = "Tot Industry growth") +
+  theme_bw()
+```
