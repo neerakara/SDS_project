@@ -188,6 +188,87 @@ plot(unemployment$SL.UEM.TOTL.NE.ZS,
      xlab="Umemployment %",
      ylab="GDP Growth")
 
+# ==========================================
+# Plot country-wise (each country in different colours)
+# This seems to be very hard to see. If required, plot this as a separate subplot for each country.
+# ==========================================
+country_index <- 1
+for (country in countries)
+{
+  tmp_idx1 <- (country_index-1)*num_years+1
+  tmp_idx2 <- country_index*num_years
+
+  unemployment_this_country <- unemployment$SL.UEM.TOTL.NE.ZS[tmp_idx1:tmp_idx2]
+  gdp_growth_this_country <- gdp_growth$NY.GDP.MKTP.KD.ZG[tmp_idx1:tmp_idx2]
+  
+  
+  if(country == 'PT')
+  {
+    print(country)
+    plot(unemployment_this_country,
+         gdp_growth_this_country,
+         type = "l",
+         col = rgb(0.01*sample(100,1),0.01*sample(100,1),0.01*sample(100,1), alpha=0.75),
+         lwd=2,
+         xlim=c(0,30),
+         ylim=c(-15,15),
+         ann=FALSE)
+  }
+  else if(country == 'PL')
+  {
+    print(country)
+    plot(unemployment_this_country,
+         gdp_growth_this_country,
+         type = "l",
+         col = rgb(0.01*sample(100,1),0.01*sample(100,1),0.01*sample(100,1), alpha=0.75),
+         lwd=2,
+         xlim=c(0,30),
+         ylim=c(-15,15),
+         ann=FALSE)
+  }
+  else if(country == 'NL')
+  {
+    print(country)
+    plot(unemployment_this_country,
+         gdp_growth_this_country,
+         type = "l",
+         col = rgb(0.01*sample(100,1),0.01*sample(100,1),0.01*sample(100,1), alpha=0.75),
+         lwd=2,
+         xlim=c(0,30),
+         ylim=c(-15,15),
+         ann=FALSE)
+  }
+  else if(country == 'IS')
+  {
+    print(country)
+    plot(unemployment_this_country,
+         gdp_growth_this_country,
+         type = "l",
+         col = rgb(0.01*sample(100,1),0.01*sample(100,1),0.01*sample(100,1), alpha=0.75),
+         lwd=2,
+         xlim=c(0,30),
+         ylim=c(-15,15),
+         ann=FALSE)
+  }
+  else
+  {
+    plot(unemployment_this_country,
+         gdp_growth_this_country,
+         type = "l",
+         col = rgb(0.01*sample(100,1),0.01*sample(100,1),0.01*sample(100,1), alpha=0.15),
+         lwd=2,
+         xlim=c(0,30),
+         ylim=c(-15,15),
+         ann=FALSE,
+         axes=FALSE)
+  }
+  
+  par(new=T)
+
+  country_index <- country_index + 1
+}
+par(new=F)
+
 # ========================================================================
 # Bootstrapping to obtain an uncertainty on the correlation coefficient
 # ========================================================================
