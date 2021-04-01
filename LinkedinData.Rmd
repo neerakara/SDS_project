@@ -1,0 +1,332 @@
+---
+title: "LinkedinData"
+author: "Giorgio Cristiano"
+date: "3/25/2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+  word_document: default
+sansfont: Calibri Light
+---
+\fontsize{11}{16}
+\selectfont
+
+```{r setup, include=FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE,}
+# install.packages("WDI")
+# install.packages("dplyr")
+# install.packages("tidyverse")
+# install.packages("broom")
+# install.packages("kableExtra")
+
+library(WDI)
+library(dplyr)
+library(tidyverse)
+library(broom)
+library(boot)
+library(kableExtra)
+```
+
+## Impact of migration on GDP
+
+
+As a next step, we would like to use the LinkedIN data to investigate how migration is impacting the growth of a country. To do so we are going to use the data provided by a collaboration between World bank and LinkedIN [citation needed]. To be consistent in our analysis we will carry out this analysis filtering only the countries whose WB Region is marked as "Europe and Central Asia".
+
+```{r, echo = FALSE}
+download.file(
+  "https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/country_migration_public.csv",
+  destfile = "CountryMigration.csv")
+
+download.file(
+  "https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/industry_migration_public.csv",
+  destfile = "IndustryMigration.csv")
+
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE,}
+countrydf_raw <- read.csv("CountryMigration.csv", header = T, sep = ",")
+industrydf_raw <- read.csv("IndustryMigration.csv", header = T, sep = ",")
+
+countrydf <-countrydf_raw %>%
+  filter(base_country_wb_region == "Europe & Central Asia") %>%
+    filter(target_country_wb_region == "Europe & Central Asia")
+
+industrydf <-industrydf_raw %>%
+  filter(wb_region == "Europe & Central Asia")
+
+```
+
+While to get data on the countries GDP (normalized per capita), and GDP growth we are going to use the WDI API interface [citation needed]. To be consistent with the data provided by LinkedIN we are going to fetch the data between 2015 and 2019.
+
+```{r WDIdata, echo = FALSE}
+WDIdf <- WDI(indicator=c("NY.GDP.PCAP.PP.CD","NY.GDP.MKTP.KD.ZG"),
+             country ="all", start = 2015, end = 2019, extra = F) %>% 
+  select(country, year, NY.GDP.PCAP.PP.CD, NY.GDP.MKTP.KD.ZG) %>% 
+  rename(GDPpc = NY.GDP.PCAP.PP.CD,
+         GDPgrowth = NY.GDP.MKTP.KD.ZG)
+```
+
+Now that we have the data that we need we can merge it in a single database that shows the migration flux among European countries, and GDPpc, GDP growth, and unemployment for both the source and destination countries. To better understand how to use this dataframe, Table \ref@(tab:migrationFlux) shows the first 10 rows. We can see that each row contains information about a specific year, about the migration flux between a base and a target country. The migration flux is normalized according to the number of LinkedIN users in the base country. This number is positive when more people are arriving from, than leaving to the target country, and negative when the opposite happens.
+
+```{r migrationFlux, echo=FALSE}
+countrydf_merged <- countrydf %>%
+  pivot_longer(cols = starts_with("net_per_10K_"),
+               names_to = "year",
+               names_prefix = "net_per_10K_",
+               names_transform = list(year = as.integer),
+               values_to = "net_per_10K",
+               values_transform = list(net_per_10K = as.double)) %>%
+  inner_join(WDIdf,  by = c("base_country_name" = "country", "year")) %>%
+  inner_join(WDIdf, by = c("target_country_name" = "country", "year")) %>%
+  rename(base_country_GDPpc = GDPpc.x, 
+         target_country_GDPpc = GDPpc.y,
+         base_country_GDPgrowth = GDPgrowth.x,
+         target_country_GDPgrowth = GDPgrowth.y,
+         migrationFlux_per10k = net_per_10K) %>% 
+  select(year, base_country_code, base_country_name, 
+         base_country_GDPpc, base_country_GDPgrowth,
+         target_country_code, target_country_name,
+         target_country_GDPpc, target_country_GDPgrowth,
+         migrationFlux_per10k)
+  
+countrydf_merged %>%
+  head(n = 10) %>% 
+  kable(booktabs = T,
+               caption = "First ten rows of the migration flux database.",
+               label = "{tab:migrationFlux}")  %>% 
+  kable_minimal()
+```
+
+Now that we have created the dataframe, we can start to investigate the relationship between the migration to a country and its wealth. The first step is to actually whether there is a trend in the destination of the migratory fluxes. To answer this question, Figure \@ref(fig:migrationperyear) (left) plots a country's migration flux as a function of its GDP, grouped by year. From the plot we have removed Luxembourg, that is a clear outlier, possibly because of its very small population. What we note from this plot is that there seems to be a positive correlation between migration flux and destination country GDP, suggesting that, as expected, more people tend to emigrate to wealthier countries, where the quality of life expectancy is higher. 
+```{r migration_peryear, fig.height=7, fig.width=9.5, fig.show="hold", out.width="50%", echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Relation between net flux migration of country X expressed as unit per 10k linkedIN users of that country and the country's GDP per capita. The data are grouped by year, and interpolated by means of linear regression. \\label{fig:migration_peryear}"}
+  
+countrydf_tot <- countrydf_merged %>%
+  mutate(base_country_GDPpc = base_country_GDPpc/1000) %>% 
+  filter(base_country_code != "lu") %>% 
+  group_by(base_country_code, base_country_name, year, base_country_GDPpc) %>% 
+  summarise(totalflux = sum(migrationFlux_per10k))
+
+model_list <- lapply(2015:2019, function(y){
+  countrydf_tot %>% 
+    filter(year == y) %>% 
+    lm(totalflux ~base_country_GDPpc, data = .) %>% 
+    summary %>% 
+    coefficients %>% 
+    as.data.frame() %>% 
+    select(Estimate, 
+           "Std. Error") %>% 
+    mutate(year = y) %>% 
+    rename(stderr = "Std. Error") %>% 
+    tail(1)
+})
+
+model_list_sum <- do.call("rbind", lapply(2015:2019, function(y){
+  countrydf_tot %>% 
+    filter(year == y) %>% 
+    lm(totalflux~base_country_GDPpc, data = .) %>% 
+    summary %>% 
+    glance %>% 
+    as.data.frame() %>% 
+    select(r.squared) %>% 
+    mutate(year = y)
+}))
+
+model_min <- model_list_sum %>% 
+  filter(r.squared ==min(r.squared))
+model_max <- model_list_sum %>% 
+  filter(r.squared ==max(r.squared))
+
+countrydf_tot %>% 
+  mutate(year = as.character(year)) %>% 
+  ggplot(aes(x = base_country_GDPpc, y = totalflux, color = year)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "GDP per capita (x10^3)",
+       y = "Migration flux (per 10k LinkedIN users)") +
+  theme_bw(base_size = 15)
+
+do.call("rbind", model_list) %>% 
+  ggplot(aes(x = year, y = Estimate)) +
+  geom_segment(aes(x = year, xend = year, y = (Estimate - stderr), 
+                   yend = (Estimate + stderr)), 
+               color = "darkgray", size = 1.5, alpha = 1) + 
+  geom_point(size = 4, color = "#F55D5D") +
+  labs(x = "Year", y= "Coefficient") +
+  theme_bw(base_size = 15)
+
+```
+To estimate the quality of the fit we can use the R^2^ statistic individually for each year. This is in the range of `r round(model_min$r.squared,2)` for the year `r model_min$year` to `r round(model_max$r.squared,2)` for the year `r model_max$year`. Meaning that whilst the fit is not perfect, it can explain more than the 25% of the data variance. Moreover, it can be noted how the coefficient of the fix seems to be decreasing with time. To have a better picture, Figure \@ref(fig:migrationperyear) (right) shows the coefficient together with a 1 std.err. per each year. From such figure we can evince that the decreasing trend seems to be within the 1 std.err. range, making it harder to distinguish from normal fluctuations. More data points will definitely be helpful in clearing up the picture.
+
+
+
+To get more insights of the fit, we can plot the histogram of the residuals for the years with the best and worst fit, as shown in Figure \@ref(fig:residuals_hist). As expected we can see that a better fit corresponds to less spread in the histogram of residuals.
+
+```{r residuals_hist, fig.height=7, fig.width=9.5, fig.show="hold", out.width="50%", echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Histograms of residuals for the year with worst fit (left) and best fit (right). \\label{fig:residuals_hist}"}
+
+countrydf_tot %>% 
+  filter(year == model_min$year) %>% 
+  lm(totalflux~base_country_GDPpc, data = .) %>% 
+  summary %>% 
+  residuals %>% 
+  as.data.frame() %>% 
+  ggplot(aes(.)) +
+  geom_histogram(binwidth = 5, fill = I("grey"), col = I("black")) +
+  labs(title = paste("year", as.character(model_min$year), sep = " "),
+       x = "Residuals") +
+  theme_bw(base_size = 15)  +
+  theme(plot.title = element_text(hjust = 0.5))
+
+countrydf_tot %>% 
+  filter(year == model_max$year) %>% 
+  lm(totalflux~base_country_GDPpc, data = .) %>% 
+  summary %>% 
+  residuals %>% 
+  as.data.frame() %>% 
+  ggplot(aes(.)) +
+  geom_histogram(binwidth = 5, fill = I("grey"), col = I("black")) +
+  labs(title = paste("year", as.character(model_max$year), sep = " "),
+       x = "Residuals") +
+  theme_bw(base_size = 15)  +
+  theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+Even though the dataset is quite small, since it includes one point per country per year, we can try to perform a bootstrap anaysis to check whether our data contains some bias. For simplicity, we will only perform this analysis on the most recent year, that is 2019. Then, the bootstrap analysis will compute the linear regression coefficient over a limited dataset that allows repetitions. Here we have performed it for 10000 replicates, and the histogram showing the variation of interpolating coefficients is shown in Figure \@ref(fig:bootModel).
+
+```{r bootModel, fig.height=4.5, fig.width=9.5, echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Histograms of coefficients when performing a bootstrap analysis of migration flux vs GDP per capita of year 2019, with R = 10000. In red is depicted the interpolating coefficient of the original dataset. \\label{fig:bootModel}"}
+
+originalCoeff <- countrydf_tot %>% 
+  filter(year == 2019) %>% 
+  lm(totalflux~base_country_GDPpc, data = .) %>% 
+  summary %>% 
+  coefficients
+
+returnCoeff2 <- function(datav, sampleindices){
+  d <- lm(datav$totalflux[sampleindices]~datav$base_country_GDPpc[sampleindices]);
+  return (d$coefficients[2])
+}
+bootResults <- countrydf_tot %>% 
+  filter(year == 2019) %>% 
+  boot(statistic = returnCoeff2, R = 10000)
+
+bootResults$t %>% 
+  as.data.frame() %>% 
+  ggplot(aes(x = V1)) +
+  geom_histogram(binwidth = 0.03, fill = I("grey"), col = I("black")) +
+  labs(x = "Interpolating coefficient") +
+  theme_bw(base_size = 15) +
+  geom_segment(aes(x = originalCoeff[2], xend = originalCoeff[2],
+                   y = 0, yend = 1000),
+               colour = "red", size = 1.5)
+
+```
+ From this histogram we can first of all note how the original coefficient is at the center of the gaussian, and how in 100% of cases, the interpolating coefficient is greater than 0. Thus we can comfortably state that there is a correlation between the migration flux and GDPpc of a country. At the same time, however, the distribution is quite wide spread, with a standard deviation of `r round(sd(bootResults$t),2)`. Hence, whilst we can state the presence of a correlation, from this analysis alone, it is hard to quantify the strength of such correlation, as the addition of more data can significantly alter the results.
+
+
+We have shown how wealthier countries tend to benefit from a larger working migration flux, it is interesting to study whether these countries are benefiting from this larger migratory flux. To do so we can plot the GDP growth as a function of the migration flux of a country. Again, as a first step, we will perform this analysis grouping the countries by year, and, as in the previous analysis, we will exclude Luxembourg, as it is a clear outlier. The results are shown in Figure  \@ref(fig:growthVSmigration). 
+```{r growthVSmigration, fig.height=4.5, fig.width=9.5, echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Plot relating the GDP growth of a country to the migrating flux (per 10k of linkedIN users), for the years 2015 to  2019. The points are fitted through the linear regression method. \\label{fig:growthVSmigration}"}
+countrydf_growth <- countrydf_merged %>%
+  filter(base_country_code != "lu") %>% 
+  group_by(base_country_code, base_country_name, year, base_country_GDPgrowth) %>% 
+  summarise(totalflux = sum(migrationFlux_per10k))
+
+model_list_growth<- do.call("rbind", lapply(2015:2019, function(y){
+  countrydf_growth %>% 
+    filter(year == y) %>% 
+    lm(totalflux~base_country_GDPgrowth, data = .) %>% 
+    summary %>% 
+    glance %>% 
+    as.data.frame() %>% 
+    select(r.squared) %>% 
+    mutate(year = y)
+}))
+
+countrydf_growth %>% 
+  mutate(year = as.character(year)) %>% 
+  ggplot(aes(y = base_country_GDPgrowth, x = totalflux, color = year)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(y = "GDP growth (%)", x = "Migration flux (per 10k LinkedIN users)") +
+  theme_bw(base_size = 15)
+  
+```
+This plot shows how there does not seem to be any correlation between GDP growth and migration, in fact the interpolating curves are very flat, and have very large residuals, in fact the R^2^ statistics are very low, iup to `r round(max(model_list_growth$r.squared),2)`. From this it is possible to conclude that, with only increase of production in mind, it should not be a country's first priority to be more appealing to foreign workers. 
+
+## Industries preferred my migratory workers
+
+To have a deeper look at how migration imapcts the growth of a country, we can also investigate whether a higher migration influx correlates to a larger growth of specific industries. To do so we are going to use again the linkedIN data that depicts the net gain (or loss) of members from (or to) a foreign country, for a specific industry, normalized to the number of linkedIN users, in that industry, in that country. These industries are gouped in different ISIC sections [citation needed]. The aim of this section is to verify whether net migration flux correlates to a larger growth of one of these sections. We are going to carry on this analysis for the most recent yea only, that is 2019.
+
+Figure \@ref(fig:growthVSmigration2) (left) depicts the data points grouped per ISIC section index, fitted through linear regression. Then, Figure \@ref(fig:growthVSmigration2) (right) shows the slope of such interpolations, together with 1 std. error.
+
+
+```{r growthVSmigration2, fig.height=7, fig.width=9.5, fig.show="hold", out.width="50%", echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Industry growth due to migration as a function of net migration in the year 2019. \\label{fig:growthVSmigration2}"}
+
+countrysumm_df <- countrydf_merged %>% 
+  filter(year == 2019, base_country_code != "lu") %>% 
+  group_by(base_country_code, base_country_GDPpc, base_country_GDPgrowth) %>% 
+  summarise(migrationFlux = sum(migrationFlux_per10k)) %>% 
+  rename(GDPpc = base_country_GDPpc,
+         GDPgrowth = base_country_GDPgrowth)
+consideredIndustries = c("I", "N", "R", "D", "Q", "C", "A", "B", "K", "G", "H", "F")
+
+industryGrowth_df <- industrydf %>% 
+  filter(isic_section_index %in% consideredIndustries) %>%
+  inner_join(countrysumm_df, by = c("country_code" = "base_country_code")) %>% 
+  group_by(isic_section_index, isic_section_name, GDPpc, country_code, GDPgrowth, migrationFlux) %>% 
+  summarise(growth = mean(net_per_10K_2019)) %>% 
+  mutate(isic_section_name = paste(isic_section_index, isic_section_name, sep = "-"))
+
+industryGrowth_df %>% 
+  ggplot(aes(x = migrationFlux, y = growth, color = isic_section_name)) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  labs(x = "Migration flux (per 10k)") +
+  labs(y = "Industry growth 2019(per 10k)") +
+  theme_bw(base_size = 20)
+
+industryGrowthvsM_lm2019 <- industryGrowth_df %>% 
+  group_by(isic_section_name) %>% 
+  do(glance(lm(growth~migrationFlux, data = .))) %>% 
+  select(r.squared, statistic)
+
+model_list_industry <- lapply(consideredIndustries, function(i){
+  industryGrowth_df %>% 
+    filter(isic_section_index == i) %>% 
+    lm(growth~migrationFlux, data = .) %>% 
+    summary %>% 
+    coefficients %>% 
+    as.data.frame() %>% 
+    select(Estimate, 
+           "Std. Error") %>% 
+    mutate(isic_section_index = i) %>% 
+    rename(stderr = "Std. Error") %>% 
+    tail(1)
+})
+
+do.call("rbind", model_list_industry) %>% 
+  ggplot(aes(x = isic_section_index, y = Estimate)) +
+  geom_segment(aes(x = isic_section_index, xend = isic_section_index, y = (Estimate - stderr), 
+                   yend = (Estimate + stderr)), 
+               color = "darkgray", size = 1.5, alpha = 1) + 
+  geom_point(size = 4, color = "#F55D5D") +
+  labs(x = "Isic Section Index", y= "Coefficient") +
+  theme_bw(base_size = 20)
+
+```
+
+We can notice how the A and D sectors are lower than the others. These are Agriculture, and Energy respectively. On the other side, there is a stronger correlation with the sections F, I, K and Q, which are Construction, Accomodation, Finance and Human Health respectively. 
+
+
+## Limitations
+
+When doing such an analysis is it also important to ideantify where the limitations are. The first, most obvious one, is that this data has been normalized to the number of LinkedIN users for each country. We could not cross-validate this data with other employment datasets. Still, according to the source, this data has already been validated with 23 other external datasets.
+Moreover, these data do not include any differentiation such as gender or age. It would be interesting to investigate how migration fluxes differ for these categories.
+
+
