@@ -149,7 +149,7 @@ countrydf_tot %>%
   geom_smooth(method = "lm", se = F) +
   labs(x = "GDP per capita (x10^3)",
        y = "Migration flux (per 10k LinkedIN users)") +
-  theme_bw(base_size = 15)
+  theme_bw(base_size = 20)
 
 do.call("rbind", model_list) %>% 
   ggplot(aes(x = year, y = Estimate)) +
@@ -158,7 +158,7 @@ do.call("rbind", model_list) %>%
                color = "darkgray", size = 1.5, alpha = 1) + 
   geom_point(size = 4, color = "#F55D5D") +
   labs(x = "Year", y= "Coefficient") +
-  theme_bw(base_size = 15)
+  theme_bw(base_size = 20)
 
 ```
 To estimate the quality of the fit we can use the R^2^ statistic individually for each year. This is in the range of `r round(model_min$r.squared,2)` for the year `r model_min$year` to `r round(model_max$r.squared,2)` for the year `r model_max$year`. Meaning that whilst the fit is not perfect, it can explain more than the 25% of the data variance. Moreover, it can be noted how the coefficient of the fix seems to be decreasing with time. To have a better picture, Figure \@ref(fig:migrationperyear) (right) shows the coefficient together with a 1 std.err. per each year. From such figure we can evince that the decreasing trend seems to be within the 1 std.err. range, making it harder to distinguish from normal fluctuations. More data points will definitely be helpful in clearing up the picture.
@@ -179,7 +179,7 @@ countrydf_tot %>%
   geom_histogram(binwidth = 5, fill = I("grey"), col = I("black")) +
   labs(title = paste("year", as.character(model_min$year), sep = " "),
        x = "Residuals") +
-  theme_bw(base_size = 15)  +
+  theme_bw(base_size = 20)  +
   theme(plot.title = element_text(hjust = 0.5))
 
 countrydf_tot %>% 
@@ -192,7 +192,7 @@ countrydf_tot %>%
   geom_histogram(binwidth = 5, fill = I("grey"), col = I("black")) +
   labs(title = paste("year", as.character(model_max$year), sep = " "),
        x = "Residuals") +
-  theme_bw(base_size = 15)  +
+  theme_bw(base_size = 20)  +
   theme(plot.title = element_text(hjust = 0.5))
 
 
@@ -284,11 +284,11 @@ industryGrowth_df <- industrydf %>%
   mutate(isic_section_name = paste(isic_section_index, isic_section_name, sep = "-"))
 
 industryGrowth_df %>% 
-  ggplot(aes(x = migrationFlux, y = growth, color = isic_section_name)) + 
+  ggplot(aes(x = migrationFlux, y = growth, color = isic_section_index)) + 
   geom_point() +
   geom_smooth(method = "lm", se = F) +
   labs(x = "Migration flux (per 10k)") +
-  labs(y = "Industry growth 2019(per 10k)") +
+  labs(y = "Industry growth(per 10k)") +
   theme_bw(base_size = 20)
 
 industryGrowthvsM_lm2019 <- industryGrowth_df %>% 
@@ -321,7 +321,7 @@ do.call("rbind", model_list_industry) %>%
 
 ```
 
-We can notice how the A and D sectors are lower than the others. These are Agriculture, and Energy respectively. On the other side, there is a stronger correlation with the sections F, I, K and Q, which are Construction, Accomodation, Finance and Human Health respectively. 
+We can notice how the A and D sectors are lower than the others. These are Agriculture, and Energy respectively. On the other side, there is a stronger correlation with the sections F, I, K and Q, which are Construction, Accomodation, Finance and Human Health respectively. It is also important to notice that the industry growth due to foreigners can go up to a non-negligible 3%. With this in mind, incentivating a working migratory flux can help a country in develop certain industry sectors, that would otherwise be less populated.
 
 
 ## Limitations
