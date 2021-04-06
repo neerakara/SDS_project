@@ -33,7 +33,7 @@ We consider all European countries: Austria, Belgium, Bulgaria, Switzerland, Cyp
 countries <- c("AT", # Austria
                "BE", # Belgium
                "BG", # Bulgaria
-               # "CH", # Switzerland
+               "CH", # Switzerland
                "CY", # Cyprus
                "CZ", # Czech Republic
                "DE", # Germany
@@ -42,7 +42,7 @@ countries <- c("AT", # Austria
                "EE", # Estonia
                "FI", # Finland
                "FR", # France
-               # "GB", # United Kingdom
+               "GB", # United Kingdom
                "GR", # Greece
                "HR", # Croatia
                "HU", # Hungary
@@ -154,7 +154,7 @@ for(i in 1:N)
 # For testing the significance of a negative correlation, we need a <= in the formula below
 p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemployment)+1)/length(corr_gdp_unemployment_permutation_test)
 ```
-In order to check the statistical significance of the computed correlation, let's do a permutation analysis. Taking `r N` permutations, we find the p-value of the measured correlation to be `r p_value_Cor`. As the p-value is greater than 0.05, the measured correlation is not statistically significant.
+In order to check the statistical significance of the computed correlation, let's do a permutation analysis. Taking `r N` permutations, we find the p-value of the measured correlation to be `r p_value_Cor`. As the p-value is smaller than 0.05, the measured correlation is statistically significant.
 
 ```{r permutation_plot, echo=FALSE, fig.width = 5, fig.height = 5}
 # Plotting the histogram of the computed correlation coefficients.
@@ -183,7 +183,7 @@ bt_std <- signif(sd(corr_gdp_unemployment_bootstrap), 3)
 bt_perc97 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.975)), 3)
 bt_perc2 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.025)), 3)
 ```
-Further, let's do a bootstrap analysis to quantify the uncertainty in the measured correlation value. Repeating the bootstrap analysis `r M` times, we find the mean correlation to be `r bt_mean`, with a standard deviation of `r bt_std`. Thus, although the measured coefficient is unbiased, there seems to relatively high uncertainty in the measurement. This observation further re-iterates that unreliability of the measured correlation, and indicates that the real correlation value for a larger data-set may be remarkably different.
+Further, let's do a bootstrap analysis to quantify the uncertainty in the measured correlation value. Repeating the bootstrap analysis `r M` times, we find the mean correlation to be `r bt_mean`, with a standard deviation of `r bt_std`. Thus, although the measured coefficient is unbiased, there seems to relatively high uncertainty in the measurement. This shows the unreliability of the measured correlation, and indicates that the real correlation value for a larger data-set may be remarkably different.
 
 ```{r, fig.width = 5, fig.height = 5, echo=FALSE}
 hist(corr_gdp_unemployment_bootstrap,
@@ -229,7 +229,7 @@ for (year in seq(from = 2005, to = 2019, by = 1))
   corr_gdp_unemployment_this_year <- signif(cor(unemployment[,3], gdp_per_capita[,3]), 3)
   
   # permutation test for this year
-  N <- 100 
+  N <- 10000 
   # vector with the results of the test statistic under each permutation
   corr_gdp_unemployment_permutation_test <- numeric(length = N) 
   for(i in 1:N)
@@ -241,7 +241,7 @@ for (year in seq(from = 2005, to = 2019, by = 1))
   p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemployment_this_year)+1)/length(corr_gdp_unemployment_permutation_test)
   
   # bootstrap analysis for this year
-  M <- 100
+  M <- 10000
   corr_gdp_unemployment_bootstrap <- numeric(M)
   for(i in 1:M)
   {
