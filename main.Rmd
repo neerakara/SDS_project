@@ -3,6 +3,7 @@ title: "SDS Project"
 output:
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -333,6 +334,16 @@ kable(correlation_group_analysis,  col.names = c("Correlation",
 # Dataframe merging
 ```{r mediation_analysis, echo=FALSE}
 
+gdp_per_capita <- WDI(indicator = indicator_gdp_per_capita, 
+                      country = countries, 
+                      start = start_year, 
+                      end = end_year)
+
+unemployment <-  WDI(indicator = indicator_unemployment_total, 
+                     country = countries, 
+                     start = start_year, 
+                     end = end_year) 
+
 unemployment_youth <-  WDI(indicator = indicator_unemployment_youth,
                      country = countries,
                      start = start_year,
@@ -375,13 +386,13 @@ onedf <- onedf %>%
      employment_services = SL.SRV.EMPL.ZS
     )
 
-onedf_filt <- filter(onedf, year>=2015)
+onedf_filt <- filter(onedf, year==2015)
 ```
 
 
 # Mediation analysis (GDP, unemp_youth, empl_agr)
 
-```{r mediation_analysis, echo=FALSE}
+```{r mediation analysis agriculture, echo=FALSE}
 agr_dep_var <- onedf_filt$gdp
 agr_indep_var <- onedf_filt$employment_agr
 agr_indep_var_fem <- onedf_filt$employment_agr
@@ -423,8 +434,8 @@ agr_group_tot <- c(agr.totaleffect$coefficients[2],agr.totaleffect_fem$coefficie
 agr_group_tot_p <- c(summary(agr.totaleffect)$coefficients[2,4], summary(agr.totaleffect_fem)$coefficients[2,4])
 agr_group_mediator <- c(agr.agr_mediator$coefficients[2],agr.agr_mediator_fem$coefficients[2])
 agr_group_mediator_p <- c(summary(agr.agr_mediator)$coefficients[2,4], summary(agr.agr_mediator_fem)$coefficients[2,4])
-agr_group_dv <- c(agr.dv$coefficients[2],agr.dv_fem$coefficients[2])
-agr_group_dv_p <- c(summary(agr.dv)$coefficients[2,4], summary(agr.dv_fem)$coefficients[2,4])
+agr_group_dv <- c(agr_results$d0, agr_results_fem$d0)
+agr_group_dv_p <- c(agr_results$d0.p, agr_results_fem$d0.p)
 
 agr_group_analysis <- data.frame(agr_group_tot,agr_group_tot_p, agr_group_mediator, agr_group_mediator_p, agr_group_dv, agr_group_dv_p)
 rownames(agr_group_analysis) <- c("Youth", "Female")
@@ -432,13 +443,13 @@ kable(agr_group_analysis,  col.names = c("I->D",
                                          "p-value",
                                          "I->M",
                                          "p-value",
-                                         "I+M->D",
+                                         "ACME",
                                          "p-value")) %>% kable_material(c("striped", "hover"))
 
 ```
 
 # Mediation analysis (GDP, unemp_youth, empl_ind)
-```{r}
+```{r mediation analysis industry, echo=FALSE}
 
 # ==========================================
 # Mediation 
@@ -484,8 +495,8 @@ ind_group_tot <- c(ind.totaleffect$coefficients[2],ind.totaleffect_fem$coefficie
 ind_group_tot_p <- c(summary(ind.totaleffect)$coefficients[2,4], summary(ind.totaleffect_fem)$coefficients[2,4])
 ind_group_mediator <- c(ind.ind_mediator$coefficients[2],ind.ind_mediator_fem$coefficients[2])
 ind_group_mediator_p <- c(summary(ind.ind_mediator)$coefficients[2,4], summary(ind.ind_mediator_fem)$coefficients[2,4])
-ind_group_dv <- c(ind.dv$coefficients[2],ind.dv_fem$coefficients[2])
-ind_group_dv_p <- c(summary(ind.dv)$coefficients[2,4], summary(ind.dv_fem)$coefficients[2,4])
+ind_group_dv <- c(ind_results$d0, ind_results_fem$d0)
+ind_group_dv_p <- c(ind_results$d0.p, ind_results_fem$d0.p)
 
 ind_group_analysis <- data.frame(ind_group_tot,ind_group_tot_p, ind_group_mediator, ind_group_mediator_p, ind_group_dv, ind_group_dv_p)
 rownames(ind_group_analysis) <- c("Youth", "Female")
@@ -493,14 +504,14 @@ kable(ind_group_analysis,  col.names = c("I->D",
                                          "p-value",
                                          "I->M",
                                          "p-value",
-                                         "I+M->D",
+                                         "ACME",
                                          "p-value")) %>% kable_material(c("striped", "hover"))
 
 
 ```
 
 # Mediation analysis (GDP, unemp_youth, empl_services)
-```{r}
+```{r mediation analysis services, echo=FALSE}
 
 ser_dep_var <- onedf_filt$gdp
 ser_indep_var <- onedf_filt$employment_services
@@ -544,8 +555,8 @@ ser_group_tot <- c(ser.totaleffect$coefficients[2],ser.totaleffect_fem$coefficie
 ser_group_tot_p <- c(summary(ser.totaleffect)$coefficients[2,4], summary(ser.totaleffect_fem)$coefficients[2,4])
 ser_group_mediator <- c(ser.ser_mediator$coefficients[2],ser.ser_mediator_fem$coefficients[2])
 ser_group_mediator_p <- c(summary(ser.ser_mediator)$coefficients[2,4], summary(ser.ser_mediator_fem)$coefficients[2,4])
-ser_group_dv <- c(ser.dv$coefficients[2],ser.dv_fem$coefficients[2])
-ser_group_dv_p <- c(summary(ser.dv)$coefficients[2,4], summary(ser.dv_fem)$coefficients[2,4])
+ser_group_dv <- c(ser_results$d0, ser_results_fem$d0)
+ser_group_dv_p <- c(ser_results$d0.p, ser_results_fem$d0.p)
 
 ser_group_analysis <- data.frame(ser_group_tot,ser_group_tot_p, ser_group_mediator, ser_group_mediator_p, ser_group_dv, ser_group_dv_p)
 rownames(ser_group_analysis) <- c("Youth", "Female")
@@ -553,7 +564,7 @@ kable(ser_group_analysis,  col.names = c("I->D",
                                          "p-value",
                                          "I->M",
                                          "p-value",
-                                         "I+M->D",
+                                         "ACME",
                                          "p-value")) %>% kable_material(c("striped", "hover"))
 
 ```
