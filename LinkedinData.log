@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.4.1)  2 APR 2021 00:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2021.4.1)  8 APR 2021 09:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -591,141 +591,130 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 87.
 (/Users/giorgicr/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-
-LaTeX Warning: Reference `@' on page 1 undefined on input line 111.
-
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 122.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 122.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 122.
-
-Overfull \hbox (593.27496pt too wide) in paragraph at lines 122--139
- [][] 
- []
-
-[1
-
-{/Users/giorgicr/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}p
-dfTeX warning (ext4): destination with the same identifier (name{table.1}) has 
-been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.152 
-      ]
-<LinkedinData_files/figure-latex/migration_peryear-1.pdf, id=27, 657.45625pt x 
+<LinkedinData_files/figure-latex/migration_peryear-1.pdf, id=16, 657.45625pt x 
 486.81876pt>
 File: LinkedinData_files/figure-latex/migration_peryear-1.pdf Graphic file (typ
 e pdf)
 <use LinkedinData_files/figure-latex/migration_peryear-1.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/migration_peryear-1.pd
-f  used on input line 154.
+f  used on input line 130.
 (pdftex.def)             Requested size: 234.86829pt x 173.9101pt.
-<LinkedinData_files/figure-latex/migration_peryear-2.pdf, id=28, 668.4975pt x 4
+<LinkedinData_files/figure-latex/migration_peryear-2.pdf, id=17, 668.4975pt x 4
 83.8075pt>
 File: LinkedinData_files/figure-latex/migration_peryear-2.pdf Graphic file (typ
 e pdf)
 <use LinkedinData_files/figure-latex/migration_peryear-2.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/migration_peryear-2.pd
-f  used on input line 154.
+f  used on input line 130.
 (pdftex.def)             Requested size: 234.87526pt x 169.9848pt.
 
-Overfull \hbox (2.21074pt too wide) in paragraph at lines 154--154
+Overfull \hbox (2.21074pt too wide) in paragraph at lines 130--130
 [][] []
  []
 
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 157.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 135.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <11> on input line 157.
+(Font)              <11> on input line 135.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7.69997> on input line 157.
+(Font)              <7.69997> on input line 135.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5.5> on input line 157.
-<LinkedinData_files/figure-latex/residuals_hist-1.pdf, id=29, 667.49374pt x 483
+(Font)              <5.5> on input line 135.
+[1
+
+{/Users/giorgicr/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+<LinkedinData_files/figure-latex/residuals_hist-1.pdf, id=33, 667.49374pt x 483
 .8075pt>
 File: LinkedinData_files/figure-latex/residuals_hist-1.pdf Graphic file (type p
 df)
 <use LinkedinData_files/figure-latex/residuals_hist-1.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/residuals_hist-1.pdf  
-used on input line 175.
+used on input line 155.
 (pdftex.def)             Requested size: 234.87907pt x 170.24318pt.
-<LinkedinData_files/figure-latex/residuals_hist-2.pdf, id=30, 667.49374pt x 483
+<LinkedinData_files/figure-latex/residuals_hist-2.pdf, id=34, 667.49374pt x 483
 .8075pt>
 File: LinkedinData_files/figure-latex/residuals_hist-2.pdf Graphic file (type p
 df)
 <use LinkedinData_files/figure-latex/residuals_hist-2.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/residuals_hist-2.pdf  
-used on input line 175.
+used on input line 155.
 (pdftex.def)             Requested size: 234.87907pt x 170.24318pt.
 
-Overfull \hbox (2.22534pt too wide) in paragraph at lines 175--175
+Overfull \hbox (2.22534pt too wide) in paragraph at lines 155--155
 [][] []
  []
 
-<LinkedinData_files/figure-latex/bootModel-1.pdf, id=31, 671.50874pt x 311.1625
-pt>
-File: LinkedinData_files/figure-latex/bootModel-1.pdf Graphic file (type pdf)
-<use LinkedinData_files/figure-latex/bootModel-1.pdf>
-Package pdftex.def Info: LinkedinData_files/figure-latex/bootModel-1.pdf  used 
-on input line 187.
-(pdftex.def)             Requested size: 469.75577pt x 217.67458pt.
 [2pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.197 
+l.167 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.167 
        <./LinkedinData_files/figure-latex/migration_peryear-1.pdf> <./LinkedinD
-ata_files/figure-latex/migration_peryear-2.pdf>]
-<LinkedinData_files/figure-latex/growthVSmigration-1.pdf, id=52, 664.4825pt x 3
+ata_files/figure-latex/migration_peryear-2.pdf> <./LinkedinData_files/figure-la
+tex/residuals_hist-1.pdf> <./LinkedinData_files/figure-latex/residuals_hist-2.p
+df>]
+<LinkedinData_files/figure-latex/bootModel-1.pdf, id=69, 671.50874pt x 311.1625
+pt>
+File: LinkedinData_files/figure-latex/bootModel-1.pdf Graphic file (type pdf)
+<use LinkedinData_files/figure-latex/bootModel-1.pdf>
+Package pdftex.def Info: LinkedinData_files/figure-latex/bootModel-1.pdf  used 
+on input line 168.
+(pdftex.def)             Requested size: 469.75577pt x 217.67458pt.
+<LinkedinData_files/figure-latex/growthVSmigration-1.pdf, id=70, 664.4825pt x 3
 11.1625pt>
 File: LinkedinData_files/figure-latex/growthVSmigration-1.pdf Graphic file (typ
 e pdf)
 <use LinkedinData_files/figure-latex/growthVSmigration-1.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/growthVSmigration-1.pd
-f  used on input line 206.
+f  used on input line 187.
 (pdftex.def)             Requested size: 469.75803pt x 219.97733pt.
-[3pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.213 
-       <./LinkedinData_files/figure-latex/residuals_hist-1.pdf> <./LinkedinData
-_files/figure-latex/residuals_hist-2.pdf> <./LinkedinData_files/figure-latex/bo
-otModel-1.pdf>]
-<LinkedinData_files/figure-latex/growthVSmigration2-1.pdf, id=79, 657.45625pt x
+[3 <./LinkedinData_files/figure-latex/bootModel-1.pdf>]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <10> on input line 220.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <7> on input line 220.
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <5> on input line 220.
+<LinkedinData_files/figure-latex/growthVSmigration2-1.pdf, id=82, 657.45625pt x
  486.81876pt>
 File: LinkedinData_files/figure-latex/growthVSmigration2-1.pdf Graphic file (ty
 pe pdf)
 <use LinkedinData_files/figure-latex/growthVSmigration2-1.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/growthVSmigration2-1.p
-df  used on input line 235.
+df  used on input line 243.
 (pdftex.def)             Requested size: 234.86829pt x 173.9101pt.
-<LinkedinData_files/figure-latex/growthVSmigration2-2.pdf, id=80, 668.4975pt x 
+<LinkedinData_files/figure-latex/growthVSmigration2-2.pdf, id=83, 668.4975pt x 
 483.8075pt>
 File: LinkedinData_files/figure-latex/growthVSmigration2-2.pdf Graphic file (ty
 pe pdf)
 <use LinkedinData_files/figure-latex/growthVSmigration2-2.pdf>
 Package pdftex.def Info: LinkedinData_files/figure-latex/growthVSmigration2-2.p
-df  used on input line 235.
+df  used on input line 243.
 (pdftex.def)             Requested size: 234.87526pt x 169.9848pt.
 
-Overfull \hbox (2.21074pt too wide) in paragraph at lines 235--235
+Overfull \hbox (2.21074pt too wide) in paragraph at lines 243--243
 [][] []
  []
 
 [4 <./LinkedinData_files/figure-latex/growthVSmigration-1.pdf>] [5pdfTeX warnin
-g (ext4): destination with the same identifier (name{figure.3}) has been alread
-y used, duplicate ignored
+g (ext4): destination with the same identifier (name{table.1}) has been already
+ used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.259 \end{document}
-                     <./LinkedinData_files/figure-latex/growthVSmigration2-1.pd
-f> <./LinkedinData_files/figure-latex/growthVSmigration2-2.pdf>] (./LinkedinDat
-a.aux)
-
-LaTeX Warning: There were undefined references.
-
+l.262 \subsection{Limitations}\label{limitations}}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.3}) has been already used, duplicat
+e ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.262 \subsection{Limitations}\label{limitations}}
+                                                   <./LinkedinData_files/figure
+-latex/growthVSmigration2-1.pdf> <./LinkedinData_files/figure-latex/growthVSmig
+ration2-2.pdf>] [6] (./LinkedinData.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -733,23 +722,27 @@ Package rerunfilecheck Info: File `LinkedinData.out' has not changed.
 (rerunfilecheck)             Checksum: 322E0C115691A91107B01CDD76AC6D79;546.
  ) 
 Here is how much of TeX's memory you used:
- 11495 strings out of 480962
- 168841 string characters out of 5906600
- 490043 words of memory out of 5000000
- 28467 multiletter control sequences out of 15000+600000
- 460864 words of font info for 81 fonts, out of 8000000 for 9000
+ 11494 strings out of 480962
+ 168831 string characters out of 5906600
+ 483086 words of memory out of 5000000
+ 28465 multiletter control sequences out of 15000+600000
+ 457866 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  71i,9n,74p,558b,330s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/Users/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Us
-ers/giorgicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></User
-s/giorgicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/g
-iorgicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/gior
-gicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/giorgic
-r/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb>
-Output written on LinkedinData.pdf (5 pages, 236325 bytes).
+{/Users/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Us
+ers/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/gi
+orgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}</Users/gior
+gicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/giorgi
+cr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/giorgicr/
+Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/giorgicr/Lib
+rary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/giorgicr/Librar
+y/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/giorgicr/Library/Ti
+nyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/giorgicr/Library/Tiny
+TeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb>
+Output written on LinkedinData.pdf (6 pages, 243098 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
- 100 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
+ 156 PDF objects out of 1000 (max. 8388607)
+ 115 compressed objects within 2 object streams
+ 17 named destinations out of 1000 (max. 500000)
  65 words of extra memory for PDF output out of 10000 (max. 10000000)
 

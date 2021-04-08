@@ -126,7 +126,8 @@ countrydf_tot %>%
   ggplot(aes(x = log(base_country_GDPpc), y = totalflux, color = year)) + 
   geom_point() +
   geom_smooth(method = "lm", se = F) +
-  theme_bw()
+  theme_bw(base_size = 15)
+  
 
 do.call("rbind", model_list) %>% 
   ggplot(aes(x = year, y = Estimate)) +
@@ -134,6 +135,6 @@ do.call("rbind", model_list) %>%
                    yend = (Estimate + stderr)), 
                color = "darkgray", size = 1.5, alpha = 1) + 
   geom_point(size = 4, color = "#F55D5D") +
-  theme_bw()
+  theme_bw(base_size = 15)
 
 ```
