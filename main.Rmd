@@ -6,24 +6,18 @@ output:
   pdf_document: default
   html_document:
     df_print: paged
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
   word_document: default
 sansfont: Calibri Light
-=======
->>>>>>> 993e4b0c1c076b9bf86818a4e9e302d173060125
->>>>>>> Stashed changes
 ---
 \fontsize{11}{16}
 \selectfont
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-```{r install, echo = FALSE}
+```{r install, echo = FALSE, message = FALSE, warning = FALSE}
 # Install required modules
 # If not done yet, install the required modules, and load them.
 # In particular, we need the WDI package. It downloads the requested data by using the World Bank's API, parses the resulting XML file, and formats it in long country-year format.
@@ -50,7 +44,7 @@ library(boot)
 ## List of countries of interest
 We consider all European countries: Austria, Belgium, Bulgaria, Switzerland, Cyprus, Czech Republic, Germany, Denmark, Spain, Estonia, Finland, France, United Kingdom, Greece, Croatia, Hungary, Iceland, Italy, Lithuania, Luxembourg, Latvia, Malta, Netherlands, Norway, Poland, Portugal, Romania, Slovakia, Slovenia and Sweden. The ISO country codes can be searched from https://www.iban.com/country-codes.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 countries <- c("AT", # Austria
                "BE", # Belgium
                "BG", # Bulgaria
@@ -90,7 +84,7 @@ num_countries <- length(countries)
 ## Time period of interest
 In order to keep the time period consistent between the world bank and the LinkedIn data, we choose the time period of interest from 2015 to 2019.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 start_year <- 2015
 end_year <- 2019
 num_years <- end_year - start_year + 1
@@ -102,7 +96,7 @@ For these indicators, we extract the data from the world bank interface. The ent
 
 First, we need the GDP per capita. This is the main variable of interest. For the analyses, we consider this as the dependent variable, and seek to understand the effect of various unemployment related parameters on the GDP per capita. There are several indicators of GDP per capital: constant 2010 US dollars, current US dollars, constant LCU, current LCU, etc. We use the GDP per capita in constant 2010 US dollars for our analysis.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 indicator_gdp_growth <- "NY.GDP.MKTP.KD.ZG"
 indicator_gdp_per_capita <- "NY.GDP.PCAP.KD" # constant 2010 US$
 # indicator_gdp_per_capita <- "NY.GDP.PCAP.CD" # GDP per capita (current US$)
@@ -111,7 +105,7 @@ indicator_gdp_per_capita <- "NY.GDP.PCAP.KD" # constant 2010 US$
 ```
 
 Among the unemployment indicators, we consider (i) the total unemployment percentage, (ii) the unemployment percentage in youths (ages 15-24), (iii) the unemployment percentage among males, and (iv) the unemployment percentage among females. In the world bank interface, for all these indicators, we have two estimates: (i) a national estimate and (ii) a modeled ILO estimate. For our analysis, we consider the national estimate.
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 indicator_unemployment_total <- "SL.UEM.TOTL.NE.ZS" # Unemployment, total (% of total labor force) (national estimate)
 indicator_unemployment_youth <- "SL.UEM.1524.NE.ZS" # Unemployment, youth total (% of total labor force ages 15-24) (national estimate)
 indicator_unemployment_male <- "SL.UEM.TOTL.MA.NE.ZS" # Unemployment, male (% of male labor force) (national estimate)
@@ -120,7 +114,7 @@ indicator_unemployment_female <- "SL.UEM.TOTL.FE.NE.ZS" # Unemployment, female (
 
 Finally, we consider the division of the total employment in different industry sectors: namely (i) agriculture (consisting of activities in agriculture, hunting, forestry and fishing), (ii) industry (consisting of mining and quarrying, manufacturing, construction, and public utilities (electricity, gas, and water) and (iii) services (consisting of wholesale and retail trade and restaurants and hotels; transport, storage, and communications; financing, insurance, real estate, and business services; and community, social, and personal services). For these indicators, only one estimate (the modeled ILO estimate) is available, and we use the same.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 indicator_employment_agriculture <- "SL.AGR.EMPL.ZS" # Employment in agriculture (% of total employment) ()
 indicator_employment_industry <- "SL.IND.EMPL.ZS" # Employment in industry (% of total employment) (modeled ILO estimate)
 indicator_employment_services <- "SL.SRV.EMPL.ZS" # Employment in services (% of total employment)
@@ -128,7 +122,7 @@ indicator_employment_services <- "SL.SRV.EMPL.ZS" # Employment in services (% of
 
 ## Correlation between total unemployment and GDP per capita (2015 - 2019)
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 # load the GDP per capita
 gdp_per_capita <- WDI(indicator = indicator_gdp_per_capita,
                       country = countries,
@@ -151,7 +145,7 @@ corr_gdp_unemployment <- signif(corr_gdp_unemployment, 3)
 
 The Pearson correlation coefficient between the total unemployment rate and the per capita GDP between 2015 and 2019 in European countries is `r corr_gdp_unemployment`.
 
-```{r, fig.width = 5, fig.height = 5, echo=FALSE}
+```{r, fig.width = 5, fig.height = 5, echo=FALSE, message = FALSE, warning = FALSE}
 # Plot the GDP per capita vs the Unemployment rate  (for all countries and all years together)
 plot(unemployment[,3],
      gdp_per_capita[,3],
@@ -161,7 +155,7 @@ plot(unemployment[,3],
      cex=0.5)
 ```
 
-```{r permutation, echo=FALSE}
+```{r permutation, echo=FALSE, message = FALSE, warning = FALSE}
 # Permutation test to compute the statistical significance of the correlation
 # repeat shuffling for N times
 N <- 10000 
@@ -183,7 +177,7 @@ p_value_Cor <- (sum(corr_gdp_unemployment_permutation_test<=corr_gdp_unemploymen
 
 In order to check the statistical significance of the computed correlation, let's do a permutation analysis. Taking `r N` permutations, we find the p-value of the measured correlation to be `r p_value_Cor`. As the p-value is smaller than 0.05, the measured correlation is statistically significant.
 
-```{r permutation_plot, echo=FALSE, fig.width = 5, fig.height = 5}
+```{r permutation_plot, echo=FALSE, fig.width = 5, fig.height = 5, message = FALSE, warning = FALSE}
 # Plotting the histogram of the computed correlation coefficients.
 # Showing as a red line, the correlation coefficient between the unshuffled variables.
 hist(corr_gdp_unemployment_permutation_test,
@@ -194,7 +188,7 @@ hist(corr_gdp_unemployment_permutation_test,
 abline(v=corr_gdp_unemployment, col="red")
 ```
 
-```{r bootstrap, echo=FALSE}
+```{r bootstrap, echo=FALSE, message = FALSE, warning = FALSE}
 # Bootstrapping to obtain an uncertainty on the correlation coefficient
 # obtain M bootstrap samples and calculate the correlation coefficient every time
 M <- 10000
@@ -213,7 +207,7 @@ bt_perc2 <- signif(quantile(corr_gdp_unemployment_bootstrap, probs=c(0.025)), 3)
 
 Further, let's do a bootstrap analysis to quantify the uncertainty in the measured correlation value. Repeating the bootstrap analysis `r M` times, we find the mean correlation to be `r bt_mean`, with a standard deviation of `r bt_std`. Thus, although the measured coefficient is unbiased, there seems to relatively high uncertainty in the measurement. This shows the unreliability of the measured correlation, and indicates that the real correlation value for a larger data-set may be remarkably different.
 
-```{r, fig.width = 5, fig.height = 5, echo=FALSE}
+```{r, fig.width = 5, fig.height = 5, echo=FALSE, message = FALSE, warning = FALSE}
 hist(corr_gdp_unemployment_bootstrap,
      main="Bootstrapping analysis",
      xlab="Correlation coefficient",
@@ -230,7 +224,7 @@ abline(v=corr_gdp_unemployment, col="red")
 ## Yearwise analysis (2005 - 2019)
 The substantial uncertainty in the measured correlation could be due to multiple reasons. It may indicate that the relationship between the GDP per capita and the total unemployment is complicated, and perhaps dependent on several other variables. Further, the cumulative analysis over the 5 year time period (2015 - 2019) may be further complicating the relationship by introducing additional variations that may have occurred in different countries in different years within the considered time period. In order to alleviate this complication, we study the relationship between the GDP per capita and the total unemployment for each year separately. As there is no dependency of this yearwise analysis on the LinkedIN analysis, and to benefit from the additional data available via the WDI interface, we include an extended time period: from 2005 to 2019.
 
-```{r correlation_one_year, echo=FALSE, cache=TRUE}
+```{r correlation_one_year, echo=FALSE, cache=TRUE, message = FALSE, warning = FALSE}
 years = c()
 coefs = c()
 btmeans = c()
@@ -297,7 +291,7 @@ We observe a clear trend in the yearwise analysis: the  correlation between the 
 
 Based on this analysis, we conclude that there may be several time-dependent factors affecting the relationship between the GDP per capita and the total unemployment. A multivariate analysis including such additional factors is outside the scope of this project. Accordingly, we decide to focus on a single year for the further analysis. As the correlation is statistically significant before 2016, and we have LinkedIn data available from 2015 onwards, 2015 is the only year which matches both our analysis criteria. 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message = FALSE, warning = FALSE}
 compute_correlation <- function(indc_gdp, indc_employ, countries, year)
 {
   
@@ -335,7 +329,7 @@ compute_correlation <- function(indc_gdp, indc_employ, countries, year)
 ## Group Analysis (2015)
 The table below shows the correlation values for different sub-groups in the population. It can be seen that the correlation values are quite similar for all the considered groups.
 
-```{r group_analysis, echo=FALSE}
+```{r group_analysis, echo=FALSE, message = FALSE, warning = FALSE}
 cor_total <- compute_correlation(indicator_gdp_per_capita, indicator_unemployment_total, countries, 2015)
 cor_youth <- compute_correlation(indicator_gdp_per_capita, indicator_unemployment_youth, countries, 2015)
 cor_male <- compute_correlation(indicator_gdp_per_capita, indicator_unemployment_male, countries, 2015)
@@ -356,16 +350,7 @@ kable(correlation_group_analysis,  col.names = c("Correlation",
 
 
 ## Mediation Analysis (2015)
-
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 # Dataframe merging
-
-```{r mediation_analysis, echo=FALSE}
-=======
->>>>>>> 993e4b0c1c076b9bf86818a4e9e302d173060125
->>>>>>> Stashed changes
 
 ```{r mediation_analysis, echo=FALSE}
 # Dataframe merging
@@ -427,7 +412,7 @@ onedf_filt <- filter(onedf, year==2015)
 
 
 
-```{r mediation_agr, echo=FALSE}
+```{r mediation_agr, echo=FALSE, message = FALSE, warning = FALSE}
 # Mediation analysis (GDP, unemp_youth, empl_agr)
 agr_dep_var <- onedf_filt$gdp
 agr_indep_var <- onedf_filt$employment_agr
@@ -461,23 +446,14 @@ agr_results = mediate(agr.agr_mediator, agr.dv, treat='agr_indep_var', mediator=
 
 agr_results_fem = mediate(agr.agr_mediator_fem, agr.dv_fem, treat='agr_indep_var_fem', mediator='agr_mediator_fem', boot=T)
 #summary(agr_results_fem)
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 plot(agr_indep_var, agr_dep_var, xlab="Employment in agriculture %", 
      ylab="GDP per capita (constant 2010 USD)", main="Scatter Plot of GDP per cap ~ Employment in agriculture", pch=19,
      col=c("blue"))
 
-<<<<<<< Updated upstream
 plot(agr_indep_var, agr_dep_var, xlab="Employment in agriculture %", 
      ylab="GDP per capita (constant 2010 USD)", main="Scatter Plot of GDP per cap ~ Employment in agriculture", pch=19,
      col=c("blue"))
-
-=======
->>>>>>> Stashed changes
-
 
 agr_group_tot <- c(agr.totaleffect$coefficients[2],agr.totaleffect_fem$coefficients[2])
 agr_group_tot_p <- c(summary(agr.totaleffect)$coefficients[2,4], summary(agr.totaleffect_fem)$coefficients[2,4])
@@ -497,18 +473,9 @@ kable(agr_group_analysis,  col.names = c("I->D",
 
 ```
 
-<<<<<<< Updated upstream
-
-=======
-<<<<<<< HEAD
 # Mediation analysis (GDP, unemp_youth, empl_ind)
 
-```{r mediation analysis industry, echo=FALSE, cache=TRUE}
-=======
->>>>>>> 993e4b0c1c076b9bf86818a4e9e302d173060125
-
->>>>>>> Stashed changes
-```{r mediation_ind, echo=FALSE}
+```{r mediation_ind, echo=FALSE, cache = TRUE, , message = FALSE, warning = FALSE}
 # Mediation analysis (GDP, unemp_youth, empl_ind)
 # ==========================================
 # Mediation 
@@ -569,17 +536,9 @@ kable(ind_group_analysis,  col.names = c("I->D",
 
 ```
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
 # Mediation analysis (GDP, unemp_youth, empl_services)
 
-```{r mediation analysis services, echo=FALSE}
-=======
->>>>>>> 993e4b0c1c076b9bf86818a4e9e302d173060125
->>>>>>> Stashed changes
-
-```{r mediation_ser, echo=FALSE}
+```{r mediation_ser, echo=FALSE, message = FALSE, warning = FALSE}
 # Mediation analysis (GDP, unemp_youth, empl_services)
 ser_dep_var <- onedf_filt$gdp
 ser_indep_var <- onedf_filt$employment_services
@@ -641,7 +600,7 @@ kable(ser_group_analysis,  col.names = c("I->D",
 ## Sector Analysis with WDI data (2015)
 In the remaining part of the project, we consider the effect of different employment sectors on the GDP. The table below shows the correlation values for different employment sectors. It can be seen that employment in agriculture and industry is negatively correlated with GDP per capita, while employment in services is positively correlated with the GDP per capita.
 
-```{r sector_analysis, echo=FALSE}
+```{r sector_analysis, echo=FALSE, message = FALSE, warning = FALSE}
 cor_agri <- compute_correlation(indicator_gdp_per_capita, indicator_employment_agriculture, countries, 2015)
 cor_indus <- compute_correlation(indicator_gdp_per_capita, indicator_employment_industry, countries, 2015)
 cor_serv <- compute_correlation(indicator_gdp_per_capita, indicator_employment_services, countries, 2015)
@@ -664,7 +623,7 @@ kable(correlation_sector_analysis,  col.names = c("Correlation",
 
 As a next step, we would like to use the LinkedIN data to investigate how migration is impacting the growth of a country. To do so we are going to use the data provided by a collaboration between World bank and LinkedIN [citation needed]. To be consistent in our analysis we will carry out this analysis filtering only the countries whose WB Region is marked as "Europe and Central Asia".
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 download.file(
   "https://development-data-hub-s3-public.s3.amazonaws.com/ddhfiles/1202896/country_migration_public.csv",
   destfile = "CountryMigration.csv")
@@ -676,8 +635,7 @@ download.file(
 ```
 
 
-```{r, echo = FALSE, warning=FALSE, message=FALSE,}
-# ciao
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
 
 countrydf_raw <- read.csv("CountryMigration.csv", header = T, sep = ",")
 industrydf_raw <- read.csv("IndustryMigration.csv", header = T, sep = ",")
@@ -693,7 +651,7 @@ industrydf <-industrydf_raw %>%
 
 While to get data on the countries GDP (normalized per capita), and GDP growth we are going to use the WDI API interface [citation needed]. To be consistent with the data provided by LinkedIN we are going to fetch the data between 2015 and 2019.
 
-```{r WDIdata, echo = FALSE}
+```{r WDIdata, echo = FALSE, message = FALSE, warning = FALSE}
 WDIdf <- WDI(indicator=c("NY.GDP.PCAP.PP.CD","NY.GDP.MKTP.KD.ZG"),
              country ="all", start = 2015, end = 2019, extra = F) %>% 
   select(country, year, NY.GDP.PCAP.PP.CD, NY.GDP.MKTP.KD.ZG) %>% 
@@ -703,7 +661,7 @@ WDIdf <- WDI(indicator=c("NY.GDP.PCAP.PP.CD","NY.GDP.MKTP.KD.ZG"),
 
 Now that we have the data that we need we can merge it in a single database that shows the migration flux among European countries, and GDPpc, GDP growth, and unemployment for both the source and destination countries. Each row contains information about a specific year, about the migration flux between a base and a target country. The migration flux is normalized according to the number of LinkedIN users in the base country. This number is positive when more people are arriving from, than leaving to the target country, and negative when the opposite happens.
 
-```{r migrationFlux, echo=FALSE}
+```{r migrationFlux, echo=FALSE, message = FALSE, warning = FALSE}
 countrydf_merged <- countrydf %>%
   pivot_longer(cols = starts_with("net_per_10K_"),
                names_to = "year",
