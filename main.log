@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.6)  8 APR 2021 15:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.6)  8 APR 2021 16:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -608,13 +608,13 @@ File: main_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 Package pdftex.def Info: main_files/figure-latex/unnamed-chunk-7-1.pdf  used on
  input line 154.
 (pdftex.def)             Requested size: 469.76666pt x 204.40228pt.
-<main_files/figure-latex/permutation_plot-1.pdf, id=72, 634.37pt x 286.06876pt>
-
+<main_files/figure-latex/permutation_plot-1.pdf, id=72, 652.4375pt x 286.06876p
+t>
 File: main_files/figure-latex/permutation_plot-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/permutation_plot-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/permutation_plot-1.pdf  used o
 n input line 162.
-(pdftex.def)             Requested size: 469.76523pt x 211.84033pt.
+(pdftex.def)             Requested size: 469.77455pt x 205.97807pt.
 <main_files/figure-latex/unnamed-chunk-8-1.pdf, id=73, 631.35875pt x 286.06876p
 t>
 File: main_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
@@ -730,7 +730,7 @@ l.433
 l.433 
        <./main_files/figure-latex/residuals_hist-1.pdf> <./main_files/figure-la
 tex/residuals_hist-2.pdf> <./main_files/figure-latex/bootModel-1.pdf>]
-<main_files/figure-latex/growthVSmigration-1.pdf, id=222, 664.4825pt x 311.1625
+<main_files/figure-latex/growthVSmigration-1.pdf, id=223, 664.4825pt x 311.1625
 pt>
 File: main_files/figure-latex/growthVSmigration-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration-1.pdf>
@@ -744,14 +744,14 @@ has been already used, duplicate ignored
 l.475 F
        igure \ref{fig:growthVSmigration2} (left) depicts the data points <./mai
 n_files/figure-latex/growthVSmigration-1.pdf>]
-<main_files/figure-latex/growthVSmigration2-1.pdf, id=238, 657.45625pt x 486.81
+<main_files/figure-latex/growthVSmigration2-1.pdf, id=239, 657.45625pt x 486.81
 876pt>
 File: main_files/figure-latex/growthVSmigration2-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration2-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/growthVSmigration2-1.pdf  used
  on input line 507.
 (pdftex.def)             Requested size: 234.86829pt x 173.9101pt.
-<main_files/figure-latex/growthVSmigration2-2.pdf, id=239, 668.4975pt x 483.807
+<main_files/figure-latex/growthVSmigration2-2.pdf, id=240, 668.4975pt x 483.807
 5pt>
 File: main_files/figure-latex/growthVSmigration2-2.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration2-2.pdf>
@@ -791,19 +791,21 @@ Here is how much of TeX's memory you used:
  71i,9n,74p,526b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Us
 ers/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/User
-s/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}</Users/gior
-gicr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/giorgi
-cr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/giorgicr/
-Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/giorgicr/Lib
-rary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/giorgicr/Librar
-y/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/giorgicr/Library/Ti
-nyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/giorgicr/Library/Tiny
-TeX/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></Users/giorgicr/Library/TinyTeX
-/texmf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on main.pdf (11 pages, 326782 bytes).
+s/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/
+giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}</Users/giorgi
+cr/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/giorgicr
+/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi12.pfb></Users/giorgicr/L
+ibrary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/giorgicr/Libr
+ary/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/giorgicr/Library
+/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/giorgicr/Library/Ti
+nyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/giorgicr/Library/TinyTe
+X/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/giorgicr/Library/TinyTeX/
+texmf-dist/fonts/type1/public/lm/lmsy8.pfb></Users/giorgicr/Library/TinyTeX/tex
+mf-dist/fonts/type1/public/lm/lmtt12.pfb>
+Output written on main.pdf (11 pages, 328997 bytes).
 PDF statistics:
- 312 PDF objects out of 1000 (max. 8388607)
- 243 compressed objects within 3 object streams
+ 317 PDF objects out of 1000 (max. 8388607)
+ 247 compressed objects within 3 object streams
  44 named destinations out of 1000 (max. 500000)
  180 words of extra memory for PDF output out of 10000 (max. 10000000)
 

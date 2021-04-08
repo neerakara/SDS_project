@@ -648,10 +648,13 @@ industrydf <-industrydf_raw %>%
 While to get data on the countries GDP (normalized per capita), and GDP growth we are going to use the WDI API interface [citation needed]. To be consistent with the data provided by LinkedIN we are going to fetch the data between 2015 and 2019.
 
 ```{r WDIdata, echo = FALSE, message = FALSE, warning = FALSE}
-WDIdf <- WDI(indicator=c("NY.GDP.PCAP.PP.CD","NY.GDP.MKTP.KD.ZG"),
+WDIdf <- WDI(indicator=c("NY.GDP.PCAP.KD","NY.GDP.MKTP.KD.ZG"),
+#WDIdf <- WDI(indicator=c("NY.GDP.PCAP.PP.CD","NY.GDP.MKTP.KD.ZG"),
              country ="all", start = 2015, end = 2019, extra = F) %>% 
-  select(country, year, NY.GDP.PCAP.PP.CD, NY.GDP.MKTP.KD.ZG) %>% 
-  rename(GDPpc = NY.GDP.PCAP.PP.CD,
+# select(country, year, NY.GDP.PCAP.PP.CD, NY.GDP.MKTP.KD.ZG) %>% 
+  select(country, year, NY.GDP.PCAP.KD, NY.GDP.MKTP.KD.ZG) %>% 
+  rename(GDPpc = NY.GDP.PCAP.KD,
+#  rename(GDPpc = NY.GDP.PCAP.PP.CD,
          GDPgrowth = NY.GDP.MKTP.KD.ZG)
 ```
 
