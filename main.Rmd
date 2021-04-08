@@ -1,9 +1,9 @@
 ---
 title: "SDS Project"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -20,11 +20,13 @@ if(!require(WDI)){
   library(WDI)
 }
 
-# install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
 
-# install.packages("kableExtra")
+#install.packages("kableExtra")
 library(kableExtra)
+#install.packages("mediation")
+#install.packages("tidyverse")
 
 library(mediation)
 library(tidyverse)
@@ -331,9 +333,9 @@ kable(correlation_group_analysis,  col.names = c("Correlation",
 
 ## Mediation Analysis (2015)
 
-# Dataframe merging
-```{r mediation_analysis, echo=FALSE}
 
+```{r mediation_analysis, echo=FALSE}
+# Dataframe merging
 gdp_per_capita <- WDI(indicator = indicator_gdp_per_capita, 
                       country = countries, 
                       start = start_year, 
@@ -390,9 +392,10 @@ onedf_filt <- filter(onedf, year==2015)
 ```
 
 
-# Mediation analysis (GDP, unemp_youth, empl_agr)
 
-```{r mediation analysis agriculture, echo=FALSE}
+
+```{r mediation_agr, echo=FALSE}
+# Mediation analysis (GDP, unemp_youth, empl_agr)
 agr_dep_var <- onedf_filt$gdp
 agr_indep_var <- onedf_filt$employment_agr
 agr_indep_var_fem <- onedf_filt$employment_agr
@@ -403,31 +406,34 @@ agr_df_mediation <- data.frame(agr_indep_var,agr_mediator,agr_dep_var)
 agr_df_mediation_fem <- data.frame(agr_indep_var_fem,agr_mediator_fem,agr_dep_var)
 
 agr.totaleffect=lm(agr_dep_var~agr_indep_var, agr_df_mediation)
-summary(agr.totaleffect)
+#summary(agr.totaleffect)
 
 agr.totaleffect_fem=lm(agr_dep_var~agr_indep_var_fem, agr_df_mediation_fem)
-summary(agr.totaleffect_fem)
+#summary(agr.totaleffect_fem)
 
 agr.agr_mediator=lm(agr_mediator~agr_indep_var,agr_df_mediation)
-summary(agr.agr_mediator)
+#summary(agr.agr_mediator)
 
 agr.agr_mediator_fem=lm(agr_mediator_fem~agr_indep_var_fem,agr_df_mediation_fem)
-summary(agr.agr_mediator_fem)
+#summary(agr.agr_mediator_fem)
 
 agr.dv=lm(agr_dep_var~agr_indep_var+agr_mediator,agr_df_mediation)
-summary(agr.dv)
+#summary(agr.dv)
 
 agr.dv_fem=lm(agr_dep_var~agr_indep_var_fem+agr_mediator_fem,agr_df_mediation_fem)
-summary(agr.dv_fem)
+#summary(agr.dv_fem)
 
 agr_results = mediate(agr.agr_mediator, agr.dv, treat='agr_indep_var', mediator='agr_mediator', boot=T)
-summary(agr_results)
+#summary(agr_results)
 
 agr_results_fem = mediate(agr.agr_mediator_fem, agr.dv_fem, treat='agr_indep_var_fem', mediator='agr_mediator_fem', boot=T)
-summary(agr_results_fem)
+#summary(agr_results_fem)
 
 
-plot(agr_indep_var, agr_dep_var)
+plot(agr_indep_var, agr_dep_var, xlab="Employment in agriculture %", 
+     ylab="GDP per capita (constant 2010 USD)", main="Scatter Plot of GDP per cap ~ Employment in agriculture", pch=19,
+     col=c("blue"))
+
 
 
 agr_group_tot <- c(agr.totaleffect$coefficients[2],agr.totaleffect_fem$coefficients[2])
@@ -448,9 +454,9 @@ kable(agr_group_analysis,  col.names = c("I->D",
 
 ```
 
-# Mediation analysis (GDP, unemp_youth, empl_ind)
-```{r mediation analysis industry, echo=FALSE}
 
+```{r mediation_ind, echo=FALSE}
+# Mediation analysis (GDP, unemp_youth, empl_ind)
 # ==========================================
 # Mediation 
 # ==========================================
@@ -464,28 +470,28 @@ ind_df_mediation <- data.frame(ind_indep_var,ind_mediator,ind_dep_var)
 ind_df_mediation_fem <- data.frame(ind_indep_var_fem,ind_mediator_fem,ind_dep_var)
 
 ind.totaleffect=lm(ind_dep_var~ind_indep_var, ind_df_mediation)
-summary(ind.totaleffect)
+#summary(ind.totaleffect)
 
 ind.totaleffect_fem=lm(ind_dep_var~ind_indep_var_fem, ind_df_mediation_fem)
-summary(ind.totaleffect_fem)
+#summary(ind.totaleffect_fem)
 
 ind.ind_mediator=lm(ind_mediator~ind_indep_var,ind_df_mediation)
-summary(ind.ind_mediator)
+#summary(ind.ind_mediator)
 
 ind.ind_mediator_fem=lm(ind_mediator_fem~ind_indep_var_fem,ind_df_mediation_fem)
-summary(ind.ind_mediator_fem)
+#summary(ind.ind_mediator_fem)
 
 ind.dv=lm(ind_dep_var~ind_indep_var+ind_mediator,ind_df_mediation)
-summary(ind.dv)
+#summary(ind.dv)
 
 ind.dv_fem=lm(ind_dep_var~ind_indep_var_fem+ind_mediator_fem,ind_df_mediation_fem)
-summary(ind.dv_fem)
+#summary(ind.dv_fem)
 
 ind_results = mediate(ind.ind_mediator, ind.dv, treat='ind_indep_var', mediator='ind_mediator', boot=T)
-summary(ind_results)
+#summary(ind_results)
 
 ind_results_fem = mediate(ind.ind_mediator_fem, ind.dv_fem, treat='ind_indep_var_fem', mediator='ind_mediator_fem', boot=T)
-summary(ind_results_fem)
+#summary(ind_results_fem)
 
 
 
@@ -510,9 +516,9 @@ kable(ind_group_analysis,  col.names = c("I->D",
 
 ```
 
-# Mediation analysis (GDP, unemp_youth, empl_services)
-```{r mediation analysis services, echo=FALSE}
 
+```{r mediation_ser, echo=FALSE}
+# Mediation analysis (GDP, unemp_youth, empl_services)
 ser_dep_var <- onedf_filt$gdp
 ser_indep_var <- onedf_filt$employment_services
 ser_indep_var_fem <- onedf_filt$employment_services
@@ -523,28 +529,28 @@ ser_df_mediation <- data.frame(ser_indep_var,ser_mediator,ser_dep_var)
 ser_df_mediation_fem <- data.frame(ser_indep_var_fem,ser_mediator_fem,ser_dep_var)
 
 ser.totaleffect=lm(ser_dep_var~ser_indep_var, ser_df_mediation)
-summary(ser.totaleffect)
+#summary(ser.totaleffect)
 
 ser.totaleffect_fem=lm(ser_dep_var~ser_indep_var_fem, ser_df_mediation_fem)
-summary(ser.totaleffect_fem)
+#summary(ser.totaleffect_fem)
 
 ser.ser_mediator=lm(ser_mediator~ser_indep_var,ser_df_mediation)
-summary(ser.ser_mediator)
+#summary(ser.ser_mediator)
 
 ser.ser_mediator_fem=lm(ser_mediator_fem~ser_indep_var_fem,ser_df_mediation_fem)
-summary(ser.ser_mediator_fem)
+#summary(ser.ser_mediator_fem)
 
 ser.dv=lm(ser_dep_var~ser_indep_var+ser_mediator,ser_df_mediation)
-summary(ser.dv)
+#summary(ser.dv)
 
 ser.dv_fem=lm(ser_dep_var~ser_indep_var_fem+ser_mediator_fem,ser_df_mediation_fem)
-summary(ser.dv_fem)
+#summary(ser.dv_fem)
 
 ser_results = mediate(ser.ser_mediator, ser.dv, treat='ser_indep_var', mediator='ser_mediator', boot=T)
-summary(ser_results)
+#summary(ser_results)
 
 ser_results_fem = mediate(ser.ser_mediator_fem, ser.dv_fem, treat='ser_indep_var_fem', mediator='ser_mediator_fem', boot=T)
-summary(ser_results_fem)
+#summary(ser_results_fem)
 
 
 
