@@ -3,7 +3,8 @@ title: "SDS Project "
 author: "G. Cristiano, R. Incandela, N. Karani"
 date: "3/25/2021"
 output:
-  pdf_document: default
+  pdf_document:
+    keep_tex: true
   html_document:
     df_print: paged
   word_document: default
@@ -950,6 +951,13 @@ do.call("rbind", model_list_industry) %>%
   theme_bw(base_size = 20)
 
 model_list_industry_sum %>%
+  arrange(isic_sector) %>% 
+  mutate(r.squared = signif(r.squared, digits = 3),
+         p.value = signif(p.value, digits = 3)) %>% 
+  select(isic_sector, p.value, r.squared) %>% 
+  rename("P value" = p.value,
+         "R^2^" = r.squared) %>% 
+  t() %>% 
   kable(booktabs = T,
                caption = "R squared and p values for the fit of industry growth due to migration vs migration flux.    \\label{tab:industryGrowth}")  %>% 
   kable_minimal()
