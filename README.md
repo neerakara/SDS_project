@@ -1,5 +1,5 @@
 # Implications of employment indicators on GDP
-## Project for the course Social Data Science 2021
+Project for the course Social Data Science 2021
 
 ### Students
 Rosario Incandela, 20-901-252, rincandela@iis.ee.ethz.ch
