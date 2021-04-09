@@ -12,10 +12,10 @@ Neerav Karani, 15-926-082, nkarani@vision.ee.ethz.ch
 Giorgio Cristiano,17-800-491, giorgio.cristiano@iis.ee.ethz.ch
 
 ### Report
-The analysis has been summarized in the file "report.pdf". 
+The analysis has been summarized in the file [report.pdf](https://github.com/neerakara/SDS_project/blob/main/report.pdf). 
 
 ### Instructions for running the code
-The analysis can be reproduced by running the markdown file "main.Rmd".
+The analysis can be reproduced by running the markdown file [main.Rmd](https://github.com/neerakara/SDS_project/blob/main/main.Rmd).
 
 ### Data sources
 The data used in the analysis was obtained from the [World Bank Databse](https://databank.worldbank.org/home) and [a collaboration of the World Bank with LinkedIn](https://linkedindata.worldbank.org/).
