@@ -17,5 +17,8 @@ The analysis has been summarized in the file "report.pdf".
 ### Instructions for running the code
 The analysis can be reproduced by running the markdown file "main.Rmd".
 
+### Data sources
+The data used in the analysis was obrained from the (World Bank Databse)[https://databank.worldbank.org/home] and (a collaboration of the World Bank with LinkedIn)[https://linkedindata.worldbank.org/]
+
 ### R version
 The code has been tested with R version 4.0.4 (https://stat.ethz.ch/CRAN/), and developed using R Studio (https://rstudio.com/products/rstudio/download/#download) version 1.4.1106.
