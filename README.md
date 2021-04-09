@@ -3,7 +3,9 @@ Project for the course Social Data Science 2021
 
 ### Students
 Rosario Incandela, 20-901-252, rincandela@iis.ee.ethz.ch
+
 Neerav Karani, 15-926-082, nkarani@vision.ee.ethz.ch
+
 Giorgio Cristiano,17-800-491, giorgio.cristiano@iis.ee.ethz.ch
 
 ### Report
