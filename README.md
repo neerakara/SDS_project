@@ -1,6 +1,9 @@
 # Implications of employment indicators on GDP
 Project for the course Social Data Science 2021
 
+### Abstract
+Gross domestic product (GDP) quantifies the economic value added via the production of goods and services. We hypothesize that if a higher percentage of the population of the country contributes to its economic activity, the country's per-capita GDP would be higher. In this project, we employ simple statistical tools to validate this hypothesis. Further, we carry out a group-analysis to understand if the contribution of employment to GDP differs across population demographics (youth, male, female). Finally, we study the dependence of GDP on employment in different industry sectors, as well as across-country employment migration.
+
 ### Students
 Rosario Incandela, 20-901-252, rincandela@iis.ee.ethz.ch
 
