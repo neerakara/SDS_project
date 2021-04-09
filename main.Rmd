@@ -348,11 +348,37 @@ kable(correlation_group_analysis,  col.names = c("Correlation",
                                                  "P-value")) %>% kable_material(c("striped", "hover"))
 ```
 
+## Sector Analysis with WDI data (2015)
+In the remaining part of the project, we consider the effect of different employment sectors on the GDP. The table below shows the correlation values for different employment sectors. It can be seen that employment in agriculture and industry is negatively correlated with GDP per capita, while employment in services is positively correlated with the GDP per capita.
+
+```{r sector_analysis, echo=FALSE, message = FALSE, warning = FALSE}
+cor_agri <- compute_correlation(indicator_gdp_per_capita, indicator_employment_agriculture, countries, 2015)
+cor_indus <- compute_correlation(indicator_gdp_per_capita, indicator_employment_industry, countries, 2015)
+cor_serv <- compute_correlation(indicator_gdp_per_capita, indicator_employment_services, countries, 2015)
+
+sector_coefs <- c(cor_agri$coef, cor_indus$coef, cor_serv$coef)
+sector_btmean <- c(cor_agri$btmean, cor_indus$btmean, cor_serv$btmean)
+sector_btstd <- c(cor_agri$btstd, cor_indus$btstd, cor_serv$btstd)
+sector_pvalues <- c(cor_agri$p, cor_indus$p, cor_serv$p)
+correlation_sector_analysis <- data.frame(sector_coefs, sector_btmean, sector_btstd, sector_pvalues)
+
+rownames(correlation_sector_analysis) <- c("Agriculture", "Industry", "Services")
+kable(correlation_sector_analysis,  col.names = c("Correlation",
+                                                 "Bootstrapping mean",
+                                                 "Bootstrapping std. dev.",
+                                                 "P-value")) %>% kable_material(c("striped", "hover"))
+
+```
 
 ## Mediation Analysis (2015)
-# Dataframe merging
 
-```{r mediation_analysis, echo=FALSE}
+In the previous section, we saw that the employment in some sectors negatively correlates with the GDP. To understand better the causal structure of this correlation, we carried out a mediation analysis to check if the employment in a specific sector correlates with unemployment in specific groups, which in turn, negatively correlates with the GDP. For instance, we saw that countries with a higher percentage of their population employed in 'industry' tend to have a lower GDP per capita. We checked if this correlation is mediated by increasing youth unemployment (perhaps because more manufacturing jobs are moved to lower wage countries outside Europe).
+For a mediation analysis, we need three variables: an independent variable (I), a dependent variable (D) and a third factor that can influence the relation between the first two variables, called mediator (M).
+The analysis consists of three steps: (i) linearly regress D from I; (ii) linearly regress M from I; (iii) linearly regress D from I and M. We used the 'mediate' package to carry out this analysis. It summarizes the total direct and indirect effects on D through the Average Causal Mediation Effect quantity.
+
+The results are shown in Table \ref{tab:mediation_agr},\ref{tab:mediation_ind} and \ref{tab:mediation_ser}. A necessary condition for mediation to happen is that I has an effect on M. If this is not the case, then M is just a third variable that has an effect on the D, but does not mediate the effect of I. This condition is not satisfied in our analysis, as the p-value of the regression between any of the employment sectors and the youth (or female) unemployment is much larger than 0.05. This means that our hypothesis is not verified and that we cannot conclude that unemployment of youths or females mediates the employment-to-GDP relation.
+
+```{r dataframe_merging, echo=FALSE}
 # Dataframe merging
 gdp_per_capita <- WDI(indicator = indicator_gdp_per_capita, 
                       country = countries, 
@@ -410,8 +436,6 @@ onedf_filt <- filter(onedf, year==2015)
 ```
 
 
-
-
 ```{r mediation_agr, echo=FALSE, message = FALSE, warning = FALSE, fig.height=4.5, fig.width=9.5}
 # Mediation analysis (GDP, unemp_youth, empl_agr)
 agr_dep_var <- onedf_filt$gdp
@@ -441,10 +465,10 @@ agr.dv=lm(agr_dep_var~agr_indep_var+agr_mediator,agr_df_mediation)
 agr.dv_fem=lm(agr_dep_var~agr_indep_var_fem+agr_mediator_fem,agr_df_mediation_fem)
 #summary(agr.dv_fem)
 
-agr_results = mediate(agr.agr_mediator, agr.dv, treat='agr_indep_var', mediator='agr_mediator', boot=T)
+agr_results = mediate(agr.agr_mediator, agr.dv, treat='agr_indep_var', mediator='agr_mediator', boot=F)
 #summary(agr_results)
 
-agr_results_fem = mediate(agr.agr_mediator_fem, agr.dv_fem, treat='agr_indep_var_fem', mediator='agr_mediator_fem', boot=T)
+agr_results_fem = mediate(agr.agr_mediator_fem, agr.dv_fem, treat='agr_indep_var_fem', mediator='agr_mediator_fem', boot=F)
 #summary(agr_results_fem)
 
 plot(agr_indep_var, agr_dep_var, xlab="Employment in agriculture %", 
@@ -467,18 +491,17 @@ agr_group_analysis <- data.frame(agr_group_tot,agr_group_tot_p, agr_group_mediat
 agr_group_analysis %>% mutate_if(is.numeric, round, digits=3) -> agr_group_analysis
 
 rownames(agr_group_analysis) <- c("Youth", "Female")
-kable(agr_group_analysis,  col.names = c("I->D",
+kable(agr_group_analysis, col.names = c("I->D",
                                          "p-value",
                                          "I->M",
                                          "p-value",
                                          "I+M->D",
                                          "p-value",
                                          "ACME",
-                                         "p-value")) %>% kable_material(c("striped", "hover"))
+                                         "p-value"),caption = "Sector: Agriculture Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect") %>% kable_material(c("striped", "hover"))
 
 ```
 
-# Mediation analysis (GDP, unemp_youth, empl_ind)
 
 ```{r mediation_ind, echo=FALSE, cache = TRUE, , message = FALSE, warning = FALSE, fig.height=4.5, fig.width=9.5}
 # Mediation analysis (GDP, unemp_youth, empl_ind)
@@ -512,10 +535,10 @@ ind.dv=lm(ind_dep_var~ind_indep_var+ind_mediator,ind_df_mediation)
 ind.dv_fem=lm(ind_dep_var~ind_indep_var_fem+ind_mediator_fem,ind_df_mediation_fem)
 #summary(ind.dv_fem)
 
-ind_results = mediate(ind.ind_mediator, ind.dv, treat='ind_indep_var', mediator='ind_mediator', boot=T)
+ind_results = mediate(ind.ind_mediator, ind.dv, treat='ind_indep_var', mediator='ind_mediator', boot=F)
 #summary(ind_results)
 
-ind_results_fem = mediate(ind.ind_mediator_fem, ind.dv_fem, treat='ind_indep_var_fem', mediator='ind_mediator_fem', boot=T)
+ind_results_fem = mediate(ind.ind_mediator_fem, ind.dv_fem, treat='ind_indep_var_fem', mediator='ind_mediator_fem', boot=F)
 #summary(ind_results_fem)
 
 
@@ -546,11 +569,10 @@ kable(ind_group_analysis,  col.names = c("I->D",
                                          "I+M->D",
                                          "p-value",
                                          "ACME",
-                                         "p-value")) %>% kable_material(c("striped", "hover"))
+                                         "p-value"),caption = "Sector: Industry. Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect") %>% kable_material(c("striped", "hover"))
 
 ```
 
-# Mediation analysis (GDP, unemp_youth, empl_services)
 
 ```{r mediation_ser, echo=FALSE, message = FALSE, warning = FALSE, fig.height=4.5, fig.width=9.5}
 # Mediation analysis (GDP, unemp_youth, empl_services)
@@ -581,10 +603,10 @@ ser.dv=lm(ser_dep_var~ser_indep_var+ser_mediator,ser_df_mediation)
 ser.dv_fem=lm(ser_dep_var~ser_indep_var_fem+ser_mediator_fem,ser_df_mediation_fem)
 #summary(ser.dv_fem)
 
-ser_results = mediate(ser.ser_mediator, ser.dv, treat='ser_indep_var', mediator='ser_mediator', boot=T)
+ser_results = mediate(ser.ser_mediator, ser.dv, treat='ser_indep_var', mediator='ser_mediator', boot=F)
 #summary(ser_results)
 
-ser_results_fem = mediate(ser.ser_mediator_fem, ser.dv_fem, treat='ser_indep_var_fem', mediator='ser_mediator_fem', boot=T)
+ser_results_fem = mediate(ser.ser_mediator_fem, ser.dv_fem, treat='ser_indep_var_fem', mediator='ser_mediator_fem', boot=F)
 #summary(ser_results_fem)
 
 
@@ -618,35 +640,13 @@ kable(ser_group_analysis,  col.names = c("I->D",
                                          "I+M->D",
                                          "p-value",
                                          "ACME",
-                                         "p-value")) %>% kable_material(c("striped", "hover"))
-
-```
-
-
-## Sector Analysis with WDI data (2015)
-In the remaining part of the project, we consider the effect of different employment sectors on the GDP. The table below shows the correlation values for different employment sectors. It can be seen that employment in agriculture and industry is negatively correlated with GDP per capita, while employment in services is positively correlated with the GDP per capita.
-
-```{r sector_analysis, echo=FALSE, message = FALSE, warning = FALSE}
-cor_agri <- compute_correlation(indicator_gdp_per_capita, indicator_employment_agriculture, countries, 2015)
-cor_indus <- compute_correlation(indicator_gdp_per_capita, indicator_employment_industry, countries, 2015)
-cor_serv <- compute_correlation(indicator_gdp_per_capita, indicator_employment_services, countries, 2015)
-
-sector_coefs <- c(cor_agri$coef, cor_indus$coef, cor_serv$coef)
-sector_btmean <- c(cor_agri$btmean, cor_indus$btmean, cor_serv$btmean)
-sector_btstd <- c(cor_agri$btstd, cor_indus$btstd, cor_serv$btstd)
-sector_pvalues <- c(cor_agri$p, cor_indus$p, cor_serv$p)
-correlation_sector_analysis <- data.frame(sector_coefs, sector_btmean, sector_btstd, sector_pvalues)
-
-rownames(correlation_sector_analysis) <- c("Agriculture", "Industry", "Services")
-kable(correlation_sector_analysis,  col.names = c("Correlation",
-                                                 "Bootstrapping mean",
-                                                 "Bootstrapping std. dev.",
-                                                 "P-value")) %>% kable_material(c("striped", "hover"))
+                                         "p-value"),caption = "Sector: Services. Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect") %>% kable_material(c("striped", "hover"))
 
 ```
 
 
 
+## LinkedIn
 As a next step, we would like to use the LinkedIN data to investigate how migration is impacting the growth of a country. To do so we are going to use the data provided by a collaboration between World bank and LinkedIN [citation needed]. To be consistent in our analysis we will carry out this analysis filtering only the countries whose WB Region is marked as "Europe and Central Asia".
 
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
