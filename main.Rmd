@@ -766,7 +766,7 @@ countrydf_tot %>%
   geom_smooth(method = "lm", se = F) +
   labs(x = "GDP per capita (x10^3)",
        y = "Migration flux (per 10k LinkedIN users)") +
-  theme_bw(base_size = 20)
+  theme_bw(base_size = 25)
 
 do.call("rbind", model_list) %>% 
   ggplot(aes(x = year, y = Estimate)) +
@@ -775,7 +775,7 @@ do.call("rbind", model_list) %>%
                color = "darkgray", size = 1.5, alpha = 1) + 
   geom_point(size = 4, color = "#F55D5D") +
   labs(x = "Year", y= "Coefficient") +
-  theme_bw(base_size = 20)
+  theme_bw(base_size = 25)
 
 ```
 
@@ -818,7 +818,7 @@ countrydf_tot %>%
 
 Even though the dataset is quite small, since it includes one point per country per year, we can try to perform a bootstrap anaysis to check whether our data contains some bias. For simplicity, we will only perform this analysis on one single year; to be consistent, we will keep using the year 2015. Then, the bootstrap analysis will compute the linear regression coefficient over a limited dataset that allows repetitions. Here we have performed it for 10000 replicates, and the histogram showing the variation of interpolating coefficients is shown in Figure \ref{fig:bootModel}.
 
-```{r bootModel, fig.height=4.5, fig.width=9.5, echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Histograms of coefficients when performing a bootstrap analysis of migration flux vs GDP per capita of year 2015, with R = 10000. In red is depicted the interpolating coefficient of the original dataset. \\label{fig:bootModel}"}
+```{r bootModel, fig.height=7, fig.width=9.5, echo = FALSE, warning=FALSE, message=FALSE, fig.cap = "Histograms of coefficients when performing a bootstrap analysis of migration flux vs GDP per capita of year 2015, with R = 10000. In red is depicted the interpolating coefficient of the original dataset. \\label{fig:bootModel}"}
 
 originalCoeff <- countrydf_tot %>% 
   filter(year == 2015) %>% 
@@ -839,7 +839,7 @@ bootResults$t %>%
   ggplot(aes(x = V1)) +
   geom_histogram(binwidth = 0.03, fill = I("grey"), col = I("black")) +
   labs(x = "Interpolating coefficient") +
-  theme_bw(base_size = 15) +
+  theme_bw(base_size = 25) +
   geom_segment(aes(x = originalCoeff[2], xend = originalCoeff[2],
                    y = 0, yend = 1000),
                colour = "red", size = 1.5)
@@ -874,7 +874,7 @@ countrydf_growth %>%
   geom_point() +
   geom_smooth(method = "lm", se = F) +
   labs(y = "GDP growth (%)", x = "Migration flux (per 10k LinkedIN users)") +
-  theme_bw(base_size = 15)
+  theme_bw(base_size = 25)
   
 ```
 
