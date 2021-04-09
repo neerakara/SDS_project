@@ -968,8 +968,4 @@ We can notice how the B, C and D sectors are lower than the others. These are Qu
 
 The p values and R^2^ values are shown in table \ref{tab:industryGrowth}. All p values are below the 0.05 threshold.Moreover, the sectors A and F have a very large std.err., meaning that there is probably more variability across the countries, and a correlation with the migration flux alone is not enough.
 
-## Limitations
-
-When doing such an analysis is it also important to identify where the limitations are. The first, most obvious one, is that this data has been normalized to the number of LinkedIN users for each country. We could not cross-validate this data with other employment datasets. Still, according to the source, this data has already been validated with 23 other external datasets.
-Moreover, these data do not include any differentiation such as gender or age. It would be interesting to investigate how migration fluxes differ for these categories.
 
