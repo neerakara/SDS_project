@@ -663,8 +663,8 @@ download.file(
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 
-countrydf_raw <- read.csv("CountryMigration.csv", header = T, sep = ",")
-industrydf_raw <- read.csv("IndustryMigration.csv", header = T, sep = ",")
+countrydf_raw <- read.csv("CountryMigration.csv", header = T, sep = ",", fileEncoding = "UTF-8-BOM")
+industrydf_raw <- read.csv("IndustryMigration.csv", header = T, sep = ",",  fileEncoding = "UTF-8-BOM")
 
 countrydf <-countrydf_raw %>%
   filter(base_country_wb_region == "Europe & Central Asia") %>%
@@ -846,7 +846,7 @@ bootResults$t %>%
 
 ```
  
-From this histogram we can first of all note how the original coefficient is at the center of the gaussian, and how in 100% of cases, the interpolating coefficient is greater than 0. Thus we can comfortably state that there is a correlation between the migration flux and GDPpc of a country. At the same time, however, the distribution is quite wide spread, with a standard deviation of `r round(sd(bootResults$t),2)`. Hence, whilst we can state the presence of a correlation, from this analysis alone, it is hard to quantify the strength of such correlation, as the addition of more data can significantly alter the results.
+From this histogram we can first of all note how the original coefficient is at the center of the gaussian, and how in 100% of cases, the interpolating coefficient is greater than 0. Thus we can comfortably state that there is a correlation between the migration flux and GDPpc of a country. At the same time, however, the distribution is quite wide spread, with a standard deviation of `r round(sd(bootResults$t),2)`, being the mean value `r round(originalCoeff[2],2)`. Hence, whilst we can state the presence of a correlation, from this analysis alone, it is hard to quantify the strength of such correlation, as the addition of more data can significantly alter the results.
 
 
 We have shown how wealthier countries tend to benefit from a larger working migration flux, it is interesting to study whether these countries are benefiting from this larger migratory flux. To do so we can plot the GDP growth as a function of the migration flux of a country. Again, as a first step, we will perform this analysis grouping the countries by year, and, as in the previous analysis, we will exclude Luxembourg, as it is a clear outlier. The results are shown in Figure  \ref{fig:growthVSmigration}. 

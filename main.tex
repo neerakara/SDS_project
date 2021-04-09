@@ -156,7 +156,7 @@ and the per capita GDP between 2015 and 2019 in European countries is
 In order to check the statistical significance of the computed
 correlation, let's do a permutation analysis. Taking \ensuremath{10^{4}}
 permutations, we find the p-value of the measured correlation to be
-0.0071. As the p-value is smaller than 0.05, the measured correlation is
+0.0068. As the p-value is smaller than 0.05, the measured correlation is
 statistically significant.
 
 \includegraphics{main_files/figure-latex/permutation_plot-1.pdf}
@@ -164,7 +164,7 @@ statistically significant.
 Further, let's do a bootstrap analysis to quantify the uncertainty in
 the measured correlation value. Repeating the bootstrap analysis
 \ensuremath{10^{4}} times, we find the mean correlation to be -0.185,
-with a standard deviation of 0.0429. Thus, although the measured
+with a standard deviation of 0.043. Thus, although the measured
 coefficient is unbiased, there seems to relatively high uncertainty in
 the measurement. This shows the unreliability of the measured
 correlation, and indicates that the real correlation value for a larger
@@ -195,21 +195,21 @@ period: from 2005 to 2019.
 \end{verbatim}
 
 \begin{verbatim}
-## [1] "2005 -0.562 -0.57 0.0812 2e-04"
-## [1] "2006 -0.517 -0.518 0.1 6e-04"
-## [1] "2007 -0.458 -0.452 0.126 0.0045"
-## [1] "2008 -0.37 -0.372 0.125 0.0202"
-## [1] "2009 -0.428 -0.43 0.129 0.0041"
-## [1] "2010 -0.509 -0.51 0.113 9e-04"
-## [1] "2011 -0.494 -0.503 0.118 0.0019"
-## [1] "2012 -0.441 -0.456 0.115 0.0041"
-## [1] "2013 -0.398 -0.413 0.107 0.0053"
-## [1] "2014 -0.347 -0.357 0.103 0.0163"
-## [1] "2015 -0.275 -0.282 0.0999 0.0536"
-## [1] "2016 -0.224 -0.226 0.0994 0.1069"
-## [1] "2017 -0.181 -0.178 0.105 0.1755"
-## [1] "2018 -0.115 -0.107 0.103 0.2954"
-## [1] "2019 -0.0647 -0.0501 0.112 0.4112"
+## [1] "2005 -0.562 -0.571 0.0797 1e-04"
+## [1] "2006 -0.517 -0.517 0.102 5e-04"
+## [1] "2007 -0.458 -0.453 0.125 0.0044"
+## [1] "2008 -0.37 -0.373 0.127 0.021"
+## [1] "2009 -0.428 -0.432 0.13 0.0056"
+## [1] "2010 -0.509 -0.509 0.115 8e-04"
+## [1] "2011 -0.494 -0.502 0.119 0.0012"
+## [1] "2012 -0.441 -0.456 0.117 0.0035"
+## [1] "2013 -0.398 -0.412 0.108 0.0047"
+## [1] "2014 -0.347 -0.357 0.104 0.0197"
+## [1] "2015 -0.275 -0.28 0.0995 0.056"
+## [1] "2016 -0.224 -0.226 0.1 0.1081"
+## [1] "2017 -0.181 -0.177 0.106 0.1668"
+## [1] "2018 -0.115 -0.107 0.104 0.2899"
+## [1] "2019 -0.0647 -0.0517 0.113 0.402"
 \end{verbatim}
 
 \includegraphics{main_files/figure-latex/correlation_one_year-1.pdf}
@@ -243,72 +243,13 @@ similar for all the considered groups.
 \hline
   & Correlation & Bootstrapping mean & Bootstrapping std. dev. & P-value\\
 \hline
-Total & -0.275 & -0.276 & 0.0400 & 0.0571\\
+Total & -0.275 & -0.277 & 0.0395 & 0.0543\\
 \hline
-Youth & -0.287 & -0.288 & 0.0423 & 0.0553\\
+Youth & -0.287 & -0.288 & 0.0420 & 0.0533\\
 \hline
-Male & -0.296 & -0.296 & 0.0445 & 0.0452\\
+Male & -0.296 & -0.297 & 0.0450 & 0.0392\\
 \hline
-Female & -0.251 & -0.253 & 0.0377 & 0.0729\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{mediation-analysis-2015}{%
-\subsection{Mediation Analysis (2015)}\label{mediation-analysis-2015}}
-
-\hypertarget{dataframe-merging}{%
-\section{Dataframe merging}\label{dataframe-merging}}
-
-\includegraphics{main_files/figure-latex/mediation_agr-1.pdf}
-
-\begin{table}
-\centering
-\begin{tabular}{l|r|r|r|r|r|r}
-\hline
-  & I->D & p-value & I->M & p-value & ACME & p-value\\
-\hline
-Youth & -2330.969 & 0.0050255 & 0.6402022 & 0.1435720 & -202.9785 & 0.294\\
-\hline
-Female & -2330.969 & 0.0050255 & 0.2482897 & 0.2463356 & -149.0624 & 0.622\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{mediation-analysis-gdp-unemp_youth-empl_ind}{%
-\section{Mediation analysis (GDP, unemp\_youth,
-empl\_ind)}\label{mediation-analysis-gdp-unemp_youth-empl_ind}}
-
-\includegraphics{main_files/figure-latex/mediation_ind-1.pdf}
-
-\begin{table}
-\centering
-\begin{tabular}{l|r|r|r|r|r|r}
-\hline
-  & I->D & p-value & I->M & p-value & ACME & p-value\\
-\hline
-Youth & -2238.58 & 0.0003038 & -0.2893222 & 0.4036032 & 230.4218 & 0.366\\
-\hline
-Female & -2238.58 & 0.0003038 & -0.1903536 & 0.2552074 & 318.8837 & 0.296\\
-\hline
-\end{tabular}
-\end{table}
-
-\hypertarget{mediation-analysis-gdp-unemp_youth-empl_services}{%
-\section{Mediation analysis (GDP, unemp\_youth,
-empl\_services)}\label{mediation-analysis-gdp-unemp_youth-empl_services}}
-
-\includegraphics{main_files/figure-latex/mediation_ser-1.pdf}
-
-\begin{table}
-\centering
-\begin{tabular}{l|r|r|r|r|r|r}
-\hline
-  & I->D & p-value & I->M & p-value & ACME & p-value\\
-\hline
-Youth & 1877.316 & 7.1e-06 & -0.0519346 & 0.8352255 & 26.83183 & 0.720\\
-\hline
-Female & 1877.316 & 7.1e-06 & 0.0199327 & 0.8694560 & -22.56174 & 0.834\\
+Female & -0.251 & -0.253 & 0.0377 & 0.0784\\
 \hline
 \end{tabular}
 \end{table}
@@ -330,14 +271,102 @@ the GDP per capita.
 \hline
   & Correlation & Bootstrapping mean & Bootstrapping std. dev. & P-value\\
 \hline
-Agriculture & -0.507 & -0.512 & 0.0247 & 2e-04\\
+Agriculture & -0.507 & -0.512 & 0.0246 & 1e-04\\
 \hline
-Industry & -0.623 & -0.623 & 0.0429 & 2e-04\\
+Industry & -0.623 & -0.623 & 0.0427 & 1e-04\\
 \hline
-Services & 0.730 & 0.731 & 0.0245 & 1e+00\\
+Services & 0.730 & 0.731 & 0.0249 & 1e+00\\
 \hline
 \end{tabular}
 \end{table}
+
+\hypertarget{mediation-analysis-2015}{%
+\subsection{Mediation Analysis (2015)}\label{mediation-analysis-2015}}
+
+In the previous section, we saw that the employment in some sectors
+negatively correlates with the GDP. To understand better the causal
+structure of this correlation, we carried out a mediation analysis to
+check if the employment in a specific sector correlates with
+unemployment in specific groups, which in turn, negatively correlates
+with the GDP. For instance, we saw that countries with a higher
+percentage of their population employed in `industry' tend to have a
+lower GDP per capita. We checked if this correlation is mediated by
+increasing youth unemployment (perhaps because more manufacturing jobs
+are moved to lower wage countries outside Europe). For a mediation
+analysis, we need three variables: an independent variable (I), a
+dependent variable (D) and a third factor that can influence the
+relation between the first two variables, called mediator (M). The
+analysis consists of three steps: (i) linearly regress D from I; (ii)
+linearly regress M from I; (iii) linearly regress D from I and M. We
+used the `mediate' package to carry out this analysis. It summarizes the
+total direct and indirect effects on D through the Average Causal
+Mediation Effect quantity.
+
+The results are shown in Table
+\ref{tab:mediation_agr},\ref{tab:mediation_ind} and
+\ref{tab:mediation_ser}. A necessary condition for mediation to happen
+is that I has an effect on M. If this is not the case, then M is just a
+third variable that has an effect on the D, but does not mediate the
+effect of I. This condition is not satisfied in our analysis, as the
+p-value of the regression between any of the employment sectors and the
+youth (or female) unemployment is much larger than 0.05. This means that
+our hypothesis is not verified and that we cannot conclude that
+unemployment of youths or females mediates the employment-to-GDP
+relation.
+
+\includegraphics{main_files/figure-latex/mediation_agr-1.pdf}
+
+\begin{table}
+
+\caption{\label{tab:mediation_agr}Sector: Agriculture Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|l|l|r|r}
+\hline
+  & I->D & p-value & I->M & p-value & I+M->D & p-value & ACME & p-value\\
+\hline
+Youth & -2330.969 & 0.005 & 0.640 & 0.144 & -2127.99/-317.054 & 0.013/0.369 & -213.304 & 0.436\\
+\hline
+Female & -2330.969 & 0.005 & 0.248 & 0.246 & -2181.906/-600.357 & 0.01/0.402 & -144.101 & 0.570\\
+\hline
+\end{tabular}
+\end{table}
+
+\includegraphics{main_files/figure-latex/mediation_ind-1.pdf}
+
+\begin{table}
+
+\caption{\label{tab:mediation_ind}Sector: Industry. Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|l|l|r|r}
+\hline
+  & I->D & p-value & I->M & p-value & I+M->D & p-value & ACME & p-value\\
+\hline
+Youth & -2238.58 & 0 & -0.289 & 0.404 & -2469.002/-796.419 & 0/0.006 & 232.575 & 0.376\\
+\hline
+Female & -2238.58 & 0 & -0.190 & 0.255 & -2557.464/-1675.218 & 0/0.006 & 315.541 & 0.224\\
+\hline
+\end{tabular}
+\end{table}
+
+\includegraphics{main_files/figure-latex/mediation_ser-1.pdf}
+
+\begin{table}
+
+\caption{\label{tab:mediation_ser}Sector: Services. Linear regression coefficients, p-values obtained from mediation analysis. For the column I+M -> D, coefficients for I and M from the joint regression are shown. ACME is the Average Causal Mediation Effect}
+\centering
+\begin{tabular}[t]{l|r|r|r|r|l|l|r|r}
+\hline
+  & I->D & p-value & I->M & p-value & I+M->D & p-value & ACME & p-value\\
+\hline
+Youth & 1877.316 & 0 & -0.052 & 0.835 & 1850.484/-516.647 & 0/0.048 & 33.846 & 0.808\\
+\hline
+Female & 1877.316 & 0 & 0.020 & 0.869 & 1899.878/-1131.897 & 0/0.034 & -33.553 & 0.814\\
+\hline
+\end{tabular}
+\end{table}
+
+\hypertarget{linkedin}{%
+\subsection{LinkedIn}\label{linkedin}}
 
 As a next step, we would like to use the LinkedIN data to investigate
 how migration is impacting the growth of a country. To do so we are
@@ -426,10 +455,10 @@ coefficient is at the center of the gaussian, and how in 100\% of cases,
 the interpolating coefficient is greater than 0. Thus we can comfortably
 state that there is a correlation between the migration flux and GDPpc
 of a country. At the same time, however, the distribution is quite wide
-spread, with a standard deviation of 0.17. Hence, whilst we can state
-the presence of a correlation, from this analysis alone, it is hard to
-quantify the strength of such correlation, as the addition of more data
-can significantly alter the results.
+spread, with a standard deviation of 0.18, being the mean value 0.54.
+Hence, whilst we can state the presence of a correlation, from this
+analysis alone, it is hard to quantify the strength of such correlation,
+as the addition of more data can significantly alter the results.
 
 We have shown how wealthier countries tend to benefit from a larger
 working migration flux, it is interesting to study whether these

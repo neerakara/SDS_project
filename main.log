@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.6)  8 APR 2021 19:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.4.6)  9 APR 2021 11:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -601,21 +601,21 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 [1
 
 {/Users/giorgicr/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<main_files/figure-latex/unnamed-chunk-7-1.pdf, id=71, 657.45625pt x 286.06876p
+<main_files/figure-latex/unnamed-chunk-7-1.pdf, id=63, 657.45625pt x 286.06876p
 t>
 File: main_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/unnamed-chunk-7-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/unnamed-chunk-7-1.pdf  used on
  input line 154.
 (pdftex.def)             Requested size: 469.76666pt x 204.40228pt.
-<main_files/figure-latex/permutation_plot-1.pdf, id=72, 652.4375pt x 286.06876p
+<main_files/figure-latex/permutation_plot-1.pdf, id=64, 652.4375pt x 286.06876p
 t>
 File: main_files/figure-latex/permutation_plot-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/permutation_plot-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/permutation_plot-1.pdf  used o
 n input line 162.
 (pdftex.def)             Requested size: 469.77455pt x 205.97807pt.
-<main_files/figure-latex/unnamed-chunk-8-1.pdf, id=73, 641.39626pt x 286.06876p
+<main_files/figure-latex/unnamed-chunk-8-1.pdf, id=65, 641.39626pt x 286.06876p
 t>
 File: main_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/unnamed-chunk-8-1.pdf>
@@ -629,7 +629,7 @@ LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
 (/Users/giorgicr/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<main_files/figure-latex/correlation_one_year-1.pdf, id=96, 680.5425pt x 313.17
+<main_files/figure-latex/correlation_one_year-1.pdf, id=88, 680.5425pt x 313.17
 pt>
 File: main_files/figure-latex/correlation_one_year-1.pdf Graphic file (type pdf
 )
@@ -644,155 +644,172 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 242.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 242.
-<main_files/figure-latex/mediation_agr-1.pdf, id=111, 657.45625pt x 286.06876pt
+[4 <./main_files/figure-latex/correlation_one_year-1.pdf>]
+<main_files/figure-latex/mediation_agr-1.pdf, id=120, 657.45625pt x 286.06876pt
 >
 File: main_files/figure-latex/mediation_agr-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/mediation_agr-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/mediation_agr-1.pdf  used on i
-nput line 263.
+nput line 317.
 (pdftex.def)             Requested size: 469.76666pt x 204.40228pt.
-[4 <./main_files/figure-latex/correlation_one_year-1.pdf>]
-<main_files/figure-latex/mediation_ind-1.pdf, id=126, 653.44125pt x 250.9375pt>
-
+<main_files/figure-latex/mediation_ind-1.pdf, id=121, 657.45625pt x 286.06876pt
+>
 File: main_files/figure-latex/mediation_ind-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/mediation_ind-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/mediation_ind-1.pdf  used on i
-nput line 282.
-(pdftex.def)             Requested size: 469.74948pt x 180.39532pt.
-<main_files/figure-latex/mediation_ser-1.pdf, id=127, 653.44125pt x 250.9375pt>
-
+nput line 334.
+(pdftex.def)             Requested size: 469.76666pt x 204.40228pt.
+[5 <./main_files/figure-latex/mediation_agr-1.pdf>]
+<main_files/figure-latex/mediation_ser-1.pdf, id=137, 657.45625pt x 286.06876pt
+>
 File: main_files/figure-latex/mediation_ser-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/mediation_ser-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/mediation_ser-1.pdf  used on i
-nput line 301.
-(pdftex.def)             Requested size: 469.74948pt x 180.39532pt.
-[5 <./main_files/figure-latex/mediation_agr-1.pdf> <./main_files/figure-latex/m
-ediation_ind-1.pdf>] [6 <./main_files/figure-latex/mediation_ser-1.pdf>]
-<main_files/figure-latex/migration_peryear-1.pdf, id=163, 657.45625pt x 486.818
+nput line 351.
+(pdftex.def)             Requested size: 469.76666pt x 204.40228pt.
+[6pdfTeX warning (ext4): destination with the same identifier (name{table.1}) h
+as been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.377 
+      pdfTeX warning (ext4): destination with the same identifier (name{table.2
+}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.377 
+       <./main_files/figure-latex/mediation_ind-1.pdf> <./main_files/figure-lat
+ex/mediation_ser-1.pdf>]
+<main_files/figure-latex/migration_peryear-1.pdf, id=161, 657.45625pt x 486.818
 76pt>
 File: main_files/figure-latex/migration_peryear-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/migration_peryear-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/migration_peryear-1.pdf  used 
-on input line 377.
+on input line 406.
 (pdftex.def)             Requested size: 234.86829pt x 173.9101pt.
-<main_files/figure-latex/migration_peryear-2.pdf, id=164, 668.4975pt x 483.8075
+<main_files/figure-latex/migration_peryear-2.pdf, id=162, 668.4975pt x 483.8075
 pt>
 File: main_files/figure-latex/migration_peryear-2.pdf Graphic file (type pdf)
 <use main_files/figure-latex/migration_peryear-2.pdf>
 Package pdftex.def Info: main_files/figure-latex/migration_peryear-2.pdf  used 
-on input line 377.
+on input line 406.
 (pdftex.def)             Requested size: 234.87526pt x 169.9848pt.
 
-Overfull \hbox (2.21074pt too wide) in paragraph at lines 377--377
+Overfull \hbox (2.21074pt too wide) in paragraph at lines 406--406
 [][] []
  []
 
-<main_files/figure-latex/residuals_hist-1.pdf, id=167, 667.49374pt x 483.8075pt
+<main_files/figure-latex/residuals_hist-1.pdf, id=165, 667.49374pt x 483.8075pt
 >
 File: main_files/figure-latex/residuals_hist-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/residuals_hist-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/residuals_hist-1.pdf  used on 
-input line 402.
+input line 431.
 (pdftex.def)             Requested size: 234.87907pt x 170.24318pt.
-<main_files/figure-latex/residuals_hist-2.pdf, id=168, 667.49374pt x 483.8075pt
+<main_files/figure-latex/residuals_hist-2.pdf, id=166, 667.49374pt x 483.8075pt
 >
 File: main_files/figure-latex/residuals_hist-2.pdf Graphic file (type pdf)
 <use main_files/figure-latex/residuals_hist-2.pdf>
 Package pdftex.def Info: main_files/figure-latex/residuals_hist-2.pdf  used on 
-input line 402.
+input line 431.
 (pdftex.def)             Requested size: 234.87907pt x 170.24318pt.
 
-Overfull \hbox (2.22534pt too wide) in paragraph at lines 402--402
+Overfull \hbox (2.22534pt too wide) in paragraph at lines 431--431
 [][] []
  []
 
-<main_files/figure-latex/bootModel-1.pdf, id=170, 671.50874pt x 311.1625pt>
+[7pdfTeX warning (ext4): destination with the same identifier (name{table.3}) h
+as been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.443 
+      ] [8pdfTeX warning (ext4): destination with the same identifier (name{fig
+ure.1}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.443 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.443 
+       <./main_files/figure-latex/migration_peryear-1.pdf> <./main_files/figure
+-latex/migration_peryear-2.pdf> <./main_files/figure-latex/residuals_hist-1.pdf
+> <./main_files/figure-latex/residuals_hist-2.pdf>]
+<main_files/figure-latex/bootModel-1.pdf, id=211, 671.50874pt x 311.1625pt>
 File: main_files/figure-latex/bootModel-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/bootModel-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/bootModel-1.pdf  used on input
- line 417.
+ line 446.
 (pdftex.def)             Requested size: 469.75577pt x 217.67458pt.
-[7pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) 
-has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.433 
-       <./main_files/figure-latex/migration_peryear-1.pdf> <./main_files/figure
--latex/migration_peryear-2.pdf>] [8pdfTeX warning (ext4): destination with the 
-same identifier (name{figure.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.433 
-      pdfTeX warning (ext4): destination with the same identifier (name{figure.
-3}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.433 
-       <./main_files/figure-latex/residuals_hist-1.pdf> <./main_files/figure-la
-tex/residuals_hist-2.pdf> <./main_files/figure-latex/bootModel-1.pdf>]
-<main_files/figure-latex/growthVSmigration-1.pdf, id=223, 664.4825pt x 311.1625
+<main_files/figure-latex/growthVSmigration-1.pdf, id=213, 664.4825pt x 311.1625
 pt>
 File: main_files/figure-latex/growthVSmigration-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/growthVSmigration-1.pdf  used 
-on input line 445.
+on input line 474.
 (pdftex.def)             Requested size: 469.75803pt x 219.97733pt.
-[9pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) 
+[9pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) 
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.475 F
-       igure \ref{fig:growthVSmigration2} (left) depicts the data points <./mai
-n_files/figure-latex/growthVSmigration-1.pdf>]
-Overfull \hbox (159.99571pt too wide) in paragraph at lines 484--491
+l.503 
+       <./main_files/figure-latex/bootModel-1.pdf>]
+Overfull \hbox (159.99571pt too wide) in paragraph at lines 513--520
  [][] 
  []
 
-<main_files/figure-latex/growthVSmigration2-1.pdf, id=239, 657.45625pt x 486.81
+<main_files/figure-latex/growthVSmigration2-1.pdf, id=230, 657.45625pt x 486.81
 876pt>
 File: main_files/figure-latex/growthVSmigration2-1.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration2-1.pdf>
 Package pdftex.def Info: main_files/figure-latex/growthVSmigration2-1.pdf  used
- on input line 494.
+ on input line 523.
 (pdftex.def)             Requested size: 234.86829pt x 173.9101pt.
-<main_files/figure-latex/growthVSmigration2-2.pdf, id=240, 668.4975pt x 483.807
+<main_files/figure-latex/growthVSmigration2-2.pdf, id=231, 668.4975pt x 483.807
 5pt>
 File: main_files/figure-latex/growthVSmigration2-2.pdf Graphic file (type pdf)
 <use main_files/figure-latex/growthVSmigration2-2.pdf>
 Package pdftex.def Info: main_files/figure-latex/growthVSmigration2-2.pdf  used
- on input line 494.
+ on input line 523.
 (pdftex.def)             Requested size: 234.87526pt x 169.9848pt.
 
-Overfull \hbox (2.21074pt too wide) in paragraph at lines 494--494
+Overfull \hbox (2.21074pt too wide) in paragraph at lines 523--523
 [][] []
  []
 
-[10pdfTeX warning (ext4): destination with the same identifier (name{table.1}) 
-has been already used, duplicate ignored
+[10pdfTeX warning (ext4): destination with the same identifier (name{figure.4})
+ has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.524 \end{document}
-                    pdfTeX warning (ext4): destination with the same identifier
- (name{figure.5}) has been already used, duplicate ignored
+l.542 \subsection{Limitations}\label{limitations}}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{table.4}) has been already used, duplicate
+ ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.524 \end{document}
+l.542 \subsection{Limitations}\label{limitations}}
+                                                   <./main_files/figure-latex/g
+rowthVSmigration-1.pdf>] [11pdfTeX warning (ext4): destination with the same id
+entifier (name{figure.5}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.553 \end{document}
                      <./main_files/figure-latex/growthVSmigration2-1.pdf> <./ma
 in_files/figure-latex/growthVSmigration2-2.pdf>] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: C0D94EB866DE58F9F78B9CC2AA9FF5F0;2980.
+(rerunfilecheck)             Checksum: 9A1232D5923BDF8C2FF0973A03FF04E2;2264.
  ) 
 Here is how much of TeX's memory you used:
- 11629 strings out of 480954
- 172092 string characters out of 5906450
- 476012 words of memory out of 5000000
- 28566 multiletter control sequences out of 15000+600000
- 464181 words of font info for 83 fonts, out of 8000000 for 9000
+ 11626 strings out of 480954
+ 171894 string characters out of 5906450
+ 479589 words of memory out of 5000000
+ 28563 multiletter control sequences out of 15000+600000
+ 458184 words of font info for 81 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 71i,9n,74p,526b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 71i,9n,74p,526b,355s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Us
 ers/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/User
 s/giorgicr/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/
@@ -806,10 +823,10 @@ nyTeX/texmf-dist/fonts/type1/public/lm/lmr8.pfb></Users/giorgicr/Library/TinyTe
 X/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/giorgicr/Library/TinyTeX/
 texmf-dist/fonts/type1/public/lm/lmsy8.pfb></Users/giorgicr/Library/TinyTeX/tex
 mf-dist/fonts/type1/public/lm/lmtt12.pfb>
-Output written on main.pdf (10 pages, 328529 bytes).
+Output written on main.pdf (11 pages, 331924 bytes).
 PDF statistics:
- 313 PDF objects out of 1000 (max. 8388607)
- 244 compressed objects within 3 object streams
+ 315 PDF objects out of 1000 (max. 8388607)
+ 245 compressed objects within 3 object streams
  43 named destinations out of 1000 (max. 500000)
- 180 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 164 words of extra memory for PDF output out of 10000 (max. 10000000)
 
